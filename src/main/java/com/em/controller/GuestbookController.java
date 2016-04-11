@@ -1,7 +1,9 @@
-package com.guestbook.controller;
+package com.em.controller;
 
 import java.util.Date;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,8 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 @Controller
 public class GuestbookController {
+	private static final Log log = LogFactory.getLog(GuestbookController.class);
+
 	@RequestMapping("/")
 	public String home() {
 		return "guestbook";
@@ -37,6 +41,8 @@ public class GuestbookController {
 					+ currentUser.getNickname());
 		}
 	}
+
+
 
 	@RequestMapping("/sign")
 	public String signGuestbook(
