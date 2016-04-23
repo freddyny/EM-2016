@@ -123,7 +123,7 @@ public class EMController {
 
     }
     @RequestMapping(value = "/groupB", method = RequestMethod.POST)
-    public ModelAndView SendToGroupB(@RequestParam("group") ArrayList<Object> JSONGroup) {
+    public ModelAndView SendToGroupB(@RequestParam("group") String JSONGroup) {
         //Login
         UserService userService = UserServiceFactory.getUserService();
         User currentUser = userService.getCurrentUser();
