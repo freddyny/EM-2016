@@ -9,6 +9,7 @@
 
 </head>
 <body>
+    <p>${email}
     <h1>HALLA :D </h1>
     <h1>HALLA MADDAFAKKISISSI</h1>
 

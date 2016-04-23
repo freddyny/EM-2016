@@ -10,9 +10,12 @@ body {
 
 .blackbackground {
     background-color: rgba(0,0,0,0.7);
-    height: 100%;
     width: 100%;
     margin: 0;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 
 }
 

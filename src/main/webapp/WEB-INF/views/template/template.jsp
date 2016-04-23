@@ -1,16 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ page import="com.google.appengine.api.datastore.DatastoreService" %>
+<%@ page import="com.google.appengine.api.datastore.DatastoreServiceFactory" %>
+<%@ page import="com.google.appengine.api.datastore.Entity" %>
+<%@ page import="com.google.appengine.api.datastore.FetchOptions" %>
+<%@ page import="com.google.appengine.api.datastore.Key" %>
+<%@ page import="com.google.appengine.api.datastore.KeyFactory" %>
+<%@ page import="com.google.appengine.api.datastore.Query" %>
+<%@ page import="com.google.appengine.api.users.User" %>
+<%@ page import="com.google.appengine.api.users.UserService" %>
+<%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <html>
 <head>
     <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap.min.css"/''>
     <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css"/''>
     <link type="text/css" rel="stylesheet" href="/stylesheets/template.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/form.css"/''>
+    <script src="<c:url value="/js/jquery1.11.1.min.js"/>"></script>
+    <script src="<c:url value="/js/bootstrap.min.js"/>"></script>
 
 
 </head>
 <body>
+<script>
+
+</script>
     <div class="blackbackground">
+
         <nav class="navbar navbar-inverse">
           <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -21,28 +37,29 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">Brand</a>
+              <a class="navbar-brand" href="/"><img class="brand-img"src="img/euro_2016.jpg" alt="EM2016"</img></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                <li class="active"><a href="/yourBet">Ditt Spill <span class="sr-only">(current)</span></a></li>
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                   <ul class="dropdown-menu">
                     <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
                   </ul>
                 </li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Link</a></li>
+                  <%
+                      UserService userService = UserServiceFactory.getUserService();
+                      User user = userService.getCurrentUser();
+                      if (user != null) {
+                          pageContext.setAttribute("user", user);
+                      }
+                  %>
+                <li><a href="<%= userService.createLogoutURL("/") %>">Sign out</a></li>
               </ul>
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
@@ -52,11 +69,9 @@
                 <div id="content-main" style="margin-top: 50px;">
                     <jsp:include page="${pageToInclude}"/>
                 </div>
-                <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
             </div>
         </div>
     </div>
-    <script src="<c:url value="/js/jquery1.11.1.min.js"/>"></script>
-    <script src="<c:url value="/js/bootstrap.min.js"/>"></script>
+
 </body>
 </html>
