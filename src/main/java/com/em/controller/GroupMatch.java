@@ -5,16 +5,21 @@ package com.em.controller;
  * Created by frederiknygaard on 23.04.16.
  */
 public class GroupMatch {
-    private int homeScore;
-    private int awayScore;
+    private int homeGoals;
+    private int awayGoals;
     private char HUB;
-    private int matchnr;
+    private int matchNumber;
 
     public GroupMatch(int home, int away, int nr, char hub){
-        homeScore=home;
-        awayScore=away;
+        homeGoals=home;
+        awayGoals=away;
         HUB = hub;
-        matchnr = nr;
+        matchNumber = nr;
+    }
+
+    public String toString(){
+
+        return "MatchNR:   " + matchNumber + "HomeGoals:   " + homeGoals + "Awaygoals:   " + awayGoals + "HUB:   " + HUB;
     }
 
 }

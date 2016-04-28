@@ -38,6 +38,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.acl.Group;
 import java.util.ArrayList;
 
 @Controller
@@ -134,7 +135,11 @@ public class EMController {
             //JsonParser parser = new JsonParser();
             //JsonObject rootObj = parser.parse(JSONGroup).getAsJsonObject();
 
+            /*Gson gson = new GsonBuilder().create();
+            GroupMatch groupMatch = gson.fromJson(JSONGroup, GroupMatch.class);
+                */
             System.out.print("ER I POST GROUP B: \n\n" + JSONGroup);
+            System.out.print("\nSKAL HA PRINTET JSON");
 
             //Entity entityUser = new Entity("bettingUser",currentUser.getUserId());
 

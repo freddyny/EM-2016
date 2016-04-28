@@ -98,7 +98,9 @@ function renderData(jsonData) {
         var tr = $('<tr>');
 
         // Now we can append the data from 'match':
-        tr.append('<td>'+match.matchNumber+'</td>');
+        var matchNr = $('<td>').addClass('match-nr')
+            .append(match.matchNumber);
+        tr.append(matchNr);
 
         // We should separate our logic in order to
         // extract our date and time, we can do this
@@ -109,8 +111,7 @@ function renderData(jsonData) {
 
         // Previously, we have appended each 'td' simply with strings,
         // we can also create them as nodes before appending:
-        var tvChannelTD = $('<td>').append(match.tvChannel);
-        tr.append(tvChannelTD);
+
 
         // Or in one line:
         tr.append($('<td>').append(match.homeTeam));
@@ -118,6 +119,7 @@ function renderData(jsonData) {
 
         // For more complex html, a good idea is to create each
         // node for readability:
+        var tdResult = $('<td>');
         var homeGoalsInput = $('<input>');
 
         // We set attributes to the input usning .attr(field, value)
@@ -125,7 +127,7 @@ function renderData(jsonData) {
 
         // Classes are added using .addClass()
         homeGoalsInput.addClass('form-control');
-
+        var homeGoalsTd = homeGoalsInput;
         // All of these can of course be chained:
         var awayGoalsInput = $('<input>')
             .attr('type', 'number')
@@ -134,12 +136,51 @@ function renderData(jsonData) {
 
         // Note that even though we created the input elements,
         // they have not yet been appended to our table row!
-        tr
-            .append(homeGoalsInput)
+        tdResult
+            .append(homeGoalsTd)
             .append('-') // Don't forget the separator ;)
-            .append(awayGoalsInput)
+            .append(awayGoalsInput);
 
-        //TODO: LEGG TIL CHECKBOX
+        tr.append(tdResult);
+        var radioboxDiv = $('<div>')
+            .addClass("radio-div");
+
+
+        var checkboxHomeLabel = $('<label>')
+            .addClass('radio-inLine active');
+
+
+
+
+        var checkBoxHomeInput = $('<input>')
+            .attr('type','radio')
+            .attr('name','HUB'+i)
+            .attr('value','H')
+            .attr('checked','');
+
+        var checkboxULabel = $('<label>')
+            .addClass('radio-inLine');
+
+        var checkBoxUInput = $('<input>')
+            .attr('type','radio')
+            .attr('name','HUB'+i)
+            .attr('value','H');
+
+        var checkboxAwayLabel = $('<label>')
+                    .addClass('radio-inLine');
+
+        var checkBoxAwayInput = $('<input>')
+            .attr('type','radio')
+            .attr('name','HUB'+i)
+            .attr('value','H');
+
+
+
+        radioboxDiv.append(checkboxHomeLabel.append(checkBoxHomeInput).append('H'))
+            .append(checkboxULabel.append(checkBoxUInput).append('U'))
+            .append(checkboxAwayLabel.append(checkBoxAwayInput).append('B'));
+        tr.append($('<td>').append(radioboxDiv));
+
         // And lastly, we must not forget to append our table row
         // to our table, this should be placed withing <tbody>
         $("table.match-table > tbody").append(tr);
@@ -147,19 +188,46 @@ function renderData(jsonData) {
 }
 
 
+    function getRadioVal(tr,name) {
+        var radios = tr.find('.radio-div');
+        console.debug(radios.text());
+        var val;
+        for (var i=0, len=radios.length; i<len; i++) {
+
+                console.debug("Er I Radios Length");
+
+                val = radios[i].value;
+                break;
+
+        }
+        return val;
+    }
+
+
 
 
 // Code from #1 below:
-$("button").bind('click', getDataAndSend);
+$("button.group-test").bind('click', getDataAndSend);
 function getDataAndSend() {
+    console.debug("ER I GETDATAANDSEND");
     var bettingData = [];
+    var index = 0;
     $("table.match-table > tbody > tr").each(function() {
         var matchBet = {};
         var tr = $(this);
-        matchBet.matchNumber = tr.attr('match-no');
+        matchBet.matchNumber = tr.find('.match-nr').text();
         matchBet.homeGoals = tr.find('input[name="home-goals"]').val();
         matchBet.awayGoals = tr.find('input[name="away-goals"]').val();
+        matchBet.HUB = getRadioVal($(tr,'HUB'+index.toString()));
         bettingData.push(matchBet);
+        index = index+=1;
+
     });
-    $('input[name="group"]').val(bettingData);
+    var group = {}
+    group.matches = bettingData;
+    console.debug(group);
+    $('input[name="group"]').val(group);
 }
+
+
+
