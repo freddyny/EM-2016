@@ -8,6 +8,7 @@
 
        <title>Gruppe ${groupName}</title>
 
+
 </head>
 <body>
     <h1>Gruppe ${groupName}</h1>
@@ -41,7 +42,6 @@
     </form:form>
 
     <script src='js/jquery-sortable.js'></script>
-    <button class="btn btn-default group-test">TEEST</button>
     <script>
         var json = ${json};
         var group =  "${nextGroupName}"

@@ -39,12 +39,6 @@ public class EMController {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 
-    @RequestMapping("/test")
-    public ModelAndView test() {
-        log.info(" LOOL. " );
-        return new ModelAndView("test", "welcomeMsg", "Hello World, " );
-    }
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView index() {
         //Login
@@ -128,7 +122,7 @@ public class EMController {
             return new ModelAndView("redirect:"
                     + userService.createLoginURL("/yourBet"));
         } else {
-            System.out.println("JSON: \t"+JSONGroup);
+            System.out.println("JSON: \t" + JSONGroup);
             DataStoreUtils.putGroupInDatastore(JSONGroup);
             String newJsonString = getJSONFromFile("res/group" + thisGroup + ".json");
 
@@ -143,7 +137,7 @@ public class EMController {
 
 
     }
-    
+
     @RequestMapping(value = "/addUser", method = RequestMethod.GET)
     public ModelAndView addUser() {
         //Login
@@ -187,9 +181,27 @@ public class EMController {
             log.info(" LOOL. " + currentUser.getEmail());
             return new ModelAndView("test", "newUser",currentUser.getEmail() );
         }
-
-
     }
+
+    @RequestMapping(value = "/matches", method = RequestMethod.GET)
+    public ModelAndView matchOppsett() {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/addUser"));
+        }
+        else{
+            String jsonString = getJSONFromFile("res/kampoppsett.json");
+            ModelAndView mv = new ModelAndView("matches");
+
+            mv.addObject("data",jsonString);
+            return mv;
+        }
+    }
+
 
     private String getJSONFromFile(String file){
         try {

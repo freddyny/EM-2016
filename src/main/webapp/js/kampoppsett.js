@@ -1,39 +1,3 @@
-// If we receive some data from our server in JSON,
-// we can easily render this in our HTML using jQuery.
-//
-// Let's say we receive this data:
-/*var data = { match: [{
-    matchNumber: 1,
-    dateTime: new Date("2014-06-12 22:00:00"),
-    tvChannel: "TV 2",
-    homeTeam: "Brasil",
-    awayTeam: "Kroatia"
-}, {
-    matchNumber: 2,
-    dateTime: new Date("2014-06-13 18:00:00"),
-    tvChannel: "NRK",
-    homeTeam: "Mexico",
-    awayTeam: "Kamerun"
-}, {
-    matchNumber: 3,
-    dateTime: new Date("2014-06-13 21:00:00"),
-    tvChannel: "NRK",
-    homeTeam: "Spania",
-    awayTeam: "Nederland"
-}, {
-    matchNumber: 4,
-    dateTime: new Date("2014-06-13 23:59:00"),
-    tvChannel: "TV 2",
-    homeTeam: "Chile",
-    awayTeam: "Australia"
-}]}*/
-
-// Let's also not forget to implement our date formatters,
-// see http://www.w3schools.com/jsref/jsref_obj_date.asp
-// for docs.
-$(function  () {
-  $("ol.sort-teams").sortable();
-});
 
 $('input[name="nextGroup"]').val(group);
 
@@ -72,21 +36,8 @@ var jsonData = JSON.stringify(json);
 // Now we can render our data using for instance a function:
 renderData(jsonData);
 
-addSortTeams(jsonData);
+ $("#sortableTable").tablesorter({sortList: [[0,0],[2,0]]});
 
-function addSortTeams(jsonData) {
-    var groupData = JSON.parse(jsonData);
-    var teams = groupData.teams;
-    console.log("ER I SORT TEAMS: " + teams);
-    for(var i = 0; i < teams.length; i++) {
-        var team = teams[i]
-        //<li class="list-group-item ">Albania</li>
-        var li = $('<li>').addClass('list-group-item');
-        li.append(team);
-        $("ol.sort-teams").append(li);
-    }
-
-}
 
 function renderData(jsonData) {
     // First parse it from json:
@@ -123,6 +74,8 @@ function renderData(jsonData) {
             .append(match.matchNumber);
         tr.append(matchNr);
 
+        tr.append($('<td>').append(match.matchType));
+
         // We should separate our logic in order to
         // extract our date and time, we can do this
         // by creating two additional functions,
@@ -133,92 +86,12 @@ function renderData(jsonData) {
         // Previously, we have appended each 'td' simply with strings,
         // we can also create them as nodes before appending:
 
+        tr.append($('<td>').append(match.tvChannel));
 
         // Or in one line:
         tr.append($('<td>').append(match.homeTeam));
         tr.append($('<td>').append(match.awayTeam));
 
-        // For more complex html, a good idea is to create each
-        // node for readability:
-        var tdResult = $('<td>');
-        var homeGoalsInput = $('<input>');
-
-        // We set attributes to the input usning .attr(field, value)
-        homeGoalsInput.attr('type', 'number').attr('name', 'home-goals');
-
-        // Classes are added using .addClass()
-        homeGoalsInput.addClass('form-control');
-        var homeGoalsTd = homeGoalsInput;
-        // All of these can of course be chained:
-        var awayGoalsInput = $('<input>')
-            .attr('type', 'number')
-            .attr('name', 'away-goals')
-            .addClass('form-control');
-
-        // Note that even though we created the input elements,
-        // they have not yet been appended to our table row!
-        tdResult
-            .append(homeGoalsTd)
-            .append('-') // Don't forget the separator ;)
-            .append(awayGoalsInput);
-
-        tr.append(tdResult);
-        /*var radioboxDiv = $('<div>')
-            .addClass("radio-div");
-
-
-        var checkboxHomeLabel = $('<label>')
-            .addClass('radio-inLine active');
-
-
-
-
-        var checkBoxHomeInput = $('<input>')
-            .attr('type','radio')
-            .attr('name','HUB'+i)
-            .attr('value','H')
-            .attr('checked','');
-
-        var checkboxULabel = $('<label>')
-            .addClass('radio-inLine');
-
-        var checkBoxUInput = $('<input>')
-            .attr('type','radio')
-            .attr('name','HUB'+i)
-            .attr('value','H');
-
-        var checkboxAwayLabel = $('<label>')
-                    .addClass('radio-inLine');
-
-        var checkBoxAwayInput = $('<input>')
-            .attr('type','radio')
-            .attr('name','HUB'+i)
-            .attr('value','H');
-
-
-
-        radioboxDiv.append(checkboxHomeLabel.append(checkBoxHomeInput).append('H'))
-            .append(checkboxULabel.append(checkBoxUInput).append('U'))
-            .append(checkboxAwayLabel.append(checkBoxAwayInput).append('B'));
-        tr.append($('<td>').append(radioboxDiv));
-
-
-        */
-        var HUB = $('<td>').addClass('HUB');
-        ['H','U','B'].forEach(function(teamValue) {
-            var radio = $('<input>')
-                .attr('type', 'radio')
-                .attr('name', 'HUBRadio-'+i)
-                .attr('value', teamValue);
-
-            var label = $('<label>')
-                .addClass('radio-inline')
-                .append(radio)
-                .append(teamValue);
-
-            HUB.append(label);
-        });
-        tr.append(HUB);
 
         // And lastly, we must not forget to append our table row
         // to our table, this should be placed withing <tbody>
@@ -280,6 +153,7 @@ function getDataAndSend() {
     console.debug(json);
     $('input[name="group"]').val(json);
 }
+
 
 
 
