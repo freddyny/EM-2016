@@ -112,126 +112,38 @@ public class EMController {
         }
 
     }
-    @RequestMapping(value = "/groupB", method = RequestMethod.POST)
-    public ModelAndView SendToGroupB(@RequestParam("group") String JSONGroup) throws ParseException {
+
+
+
+
+
+    @RequestMapping(value = "/group", method = RequestMethod.POST)
+    public ModelAndView SendToGroupE(@RequestParam("group") String JSONGroup,
+                                     @RequestParam("nextGroup")String thisGroup) throws ParseException {
         //Login
         UserService userService = UserServiceFactory.getUserService();
         User currentUser = userService.getCurrentUser();
-        if (currentUser == null) {
-            return new ModelAndView("redirect:"
-                    + userService.createLoginURL("/yourBet"));
-        } else {
-            System.out.println("JSON: \t" + JSONGroup);
-            DataStoreUtils.putGroupInDatastore(JSONGroup);
-            String newJsonString = getJSONFromFile("res/groupB.json");
-
-            ModelAndView mv = new ModelAndView("group", "user",currentUser );
-            mv.addObject("json",newJsonString);
-            mv.addObject("groupName","B");
-            mv.addObject("nextGroupName","C");
-
-            return mv;
-
-        }
-
-    }
-
-    @RequestMapping(value = "/groupC", method = RequestMethod.POST)
-    public ModelAndView SendToGroupC(@RequestParam("group") String JSONGroup) throws ParseException {
-        //Login
-        UserService userService = UserServiceFactory.getUserService();
-        User currentUser = userService.getCurrentUser();
+        System.out.println("NEXT GROUP:    \n"+thisGroup+"\n");
         if (currentUser == null) {
             return new ModelAndView("redirect:"
                     + userService.createLoginURL("/yourBet"));
         } else {
             System.out.println("JSON: \t"+JSONGroup);
             DataStoreUtils.putGroupInDatastore(JSONGroup);
-            String newJsonString = getJSONFromFile("res/groupC.json");
+            String newJsonString = getJSONFromFile("res/group" + thisGroup + ".json");
 
             ModelAndView mv = new ModelAndView("group", "user",currentUser );
             mv.addObject("json",newJsonString);
-            mv.addObject("groupName","C");
-            mv.addObject("nextGroupName","D");
-
-
+            mv.addObject("groupName",thisGroup);
+            mv.addObject("nextGroupName",getNextGroup(thisGroup));
             return mv;
 
         }
 
-    }
 
-    @RequestMapping(value = "/groupD", method = RequestMethod.POST)
-    public ModelAndView SendToGroupD(@RequestParam("group") String JSONGroup) throws ParseException {
-        //Login
-        UserService userService = UserServiceFactory.getUserService();
-        User currentUser = userService.getCurrentUser();
-        if (currentUser == null) {
-            return new ModelAndView("redirect:"
-                    + userService.createLoginURL("/yourBet"));
-        } else {
-            System.out.println("JSON: \t"+JSONGroup);
-            DataStoreUtils.putGroupInDatastore(JSONGroup);
-            String newJsonString = getJSONFromFile("res/groupD.json");
-
-            ModelAndView mv = new ModelAndView("group", "user",currentUser );
-            mv.addObject("json",newJsonString);
-            mv.addObject("groupName","D");
-            mv.addObject("nextGroupName","E");
-
-            return mv;
-
-        }
 
     }
-    @RequestMapping(value = "/groupE", method = RequestMethod.POST)
-    public ModelAndView SendToGroupE(@RequestParam("group") String JSONGroup) throws ParseException {
-        //Login
-        UserService userService = UserServiceFactory.getUserService();
-        User currentUser = userService.getCurrentUser();
-        if (currentUser == null) {
-            return new ModelAndView("redirect:"
-                    + userService.createLoginURL("/yourBet"));
-        } else {
-            System.out.println("JSON: \t"+JSONGroup);
-            DataStoreUtils.putGroupInDatastore(JSONGroup);
-            String newJsonString = getJSONFromFile("res/groupE.json");
-
-            ModelAndView mv = new ModelAndView("group", "user",currentUser );
-            mv.addObject("json",newJsonString);
-            mv.addObject("groupName","E");
-            mv.addObject("nextGroupName","F");
-            return mv;
-
-        }
-
-    }
-    @RequestMapping(value = "/groupF", method = RequestMethod.POST)
-    public ModelAndView SendToGroupF(@RequestParam("group") String JSONGroup) throws ParseException {
-        //Login
-        UserService userService = UserServiceFactory.getUserService();
-        User currentUser = userService.getCurrentUser();
-        if (currentUser == null) {
-            return new ModelAndView("redirect:"
-                    + userService.createLoginURL("/yourBet"));
-        } else {
-            System.out.println("JSON: \t"+JSONGroup);
-            DataStoreUtils.putGroupInDatastore(JSONGroup);
-            String newJsonString = getJSONFromFile("res/groupF.json");
-
-            ModelAndView mv = new ModelAndView("group", "user",currentUser );
-            mv.addObject("json",newJsonString);
-            mv.addObject("groupName","F");
-
-            return mv;
-
-        }
-
-    }
-
-
-
-
+    
     @RequestMapping(value = "/addUser", method = RequestMethod.GET)
     public ModelAndView addUser() {
         //Login
@@ -304,4 +216,24 @@ public class EMController {
     }
 
 
+    private String getNextGroup(String thisGrou){
+        switch(thisGrou){
+            case "A":
+                return "B";
+            case "B":
+                return "C";
+            case "C":
+                return "D";
+            case "D":
+                return "E";
+            case "E":
+                return "F";
+            case "F":
+                return "Done";
+            default:
+                return "";
+
+        }
+
+    }
 }

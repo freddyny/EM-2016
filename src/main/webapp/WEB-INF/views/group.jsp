@@ -11,8 +11,9 @@
 </head>
 <body>
     <h1>Gruppe ${groupName}</h1>
-    <p>Legg til resultater, sorter gruppen og trykk på neste. </p>
-    <form:form method="POST" class = "groupForm" action="/group${nextGroupName}">
+    <p>Legg til resultater, sorter gruppen og trykk på neste.</p>
+    <p> Man får 2 poeng for riktig resultat og 1 poeng for riktig HUB</p>
+    <form:form method="POST" class = "groupForm" action="/group">
        <table class="table match-table">
            <thead>
                <tr>
@@ -28,12 +29,23 @@
            <tbody></tbody>
        </table>
        <input type="hidden" class="input_JSON" name="group" value="" />
+       <input type="hidden" class="nextGroup" name="nextGroup" value="" />
+
+       <p>Sorter listen i den rekkefølgen du tror gruppen ender</p>
+       <p>Du får 2 poeng for hvert riktig plassert lag.</p>
+           <ol class='sort-teams list-group'>
+           </ol>
+
+       </div>
        <button class="btn btn-default group-button" type="submit" >Neste</button>
     </form:form>
+
+    <script src='js/jquery-sortable.js'></script>
     <button class="btn btn-default group-test">TEEST</button>
     <script>
         var json = ${json};
-        var group =  "${nextGroupName}";
+        var group =  "${nextGroupName}"
+        var thisGroup = "${groupName}";
     </script>
     <script src="<c:url value="/js/group.js"/>"></script>
 

@@ -22,6 +22,7 @@ public class DataStoreUtils {
         Gson gson = new GsonBuilder().create();
         group = gson.fromJson(JSONGroup, Group.class);
 
+
         for(GroupMatch groupMatch: group.getMatches()){
             Entity match = new Entity("Match_"+groupMatch.getMatchNumber(), currentUser.getUserId());
             match.setProperty("HUB",""+groupMatch.getHUB());
@@ -29,6 +30,10 @@ public class DataStoreUtils {
             match.setProperty("awayGoals",groupMatch.getAwayGoals());
             datastore.put(match);
         }
+
+        Entity groupBet = new Entity("Group"+group.getName(), currentUser.getUserId());
+        groupBet.setProperty("bet",group.getTeams());
+        datastore.put(groupBet);
 
 
     }

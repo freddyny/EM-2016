@@ -31,6 +31,12 @@
 // Let's also not forget to implement our date formatters,
 // see http://www.w3schools.com/jsref/jsref_obj_date.asp
 // for docs.
+$(function  () {
+  $("ol.sort-teams").sortable();
+});
+
+$('input[name="nextGroup"]').val(group);
+
 function getDateString(date) {
     var year = date.getFullYear();
     var month = date.getMonth() + 1; // 0-indexed
@@ -66,11 +72,26 @@ var jsonData = JSON.stringify(json);
 // Now we can render our data using for instance a function:
 renderData(jsonData);
 
+addSortTeams(jsonData);
+
+function addSortTeams(jsonData) {
+    var groupData = JSON.parse(jsonData);
+    var teams = groupData.teams;
+    console.log("ER I SORT TEAMS: " + teams);
+    for(var i = 0; i < teams.length; i++) {
+        var team = teams[i]
+        //<li class="list-group-item ">Albania</li>
+        var li = $('<li>').addClass('list-group-item');
+        li.append(team);
+        $("ol.sort-teams").append(li);
+    }
+
+}
+
 function renderData(jsonData) {
     // First parse it from json:
     var groupData = JSON.parse(jsonData);
     var matches = groupData.match;
-    var teams = groupData.teams;
     console.debug(matches[0].dateTime);
     // Check your console! You will see that the date
     // of each match is just a string! We want to work
@@ -247,8 +268,14 @@ function getDataAndSend() {
         bettingData.push(matchBet);
 
     });
+    teams = [];
+    $( "ol li" ).each(function( index ) {
+        teams.push($( this ).text());
+    });
     group = {};
     group.matches = bettingData;
+    group.teams = teams;
+    group.name = thisGroup;
     var json = JSON.stringify(group);
     console.debug(json);
     $('input[name="group"]').val(json);
