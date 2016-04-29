@@ -28,7 +28,7 @@
            <tbody></tbody>
        </table>
        <input type="hidden" class="input_JSON" name="group" value="" />
-       <button class="btn btn-default" class="group-button" type="submit" name="group" >Neste</button>
+       <button class="btn btn-default group-button" type="submit" >Neste</button>
     </form:form>
     <button class="btn btn-default group-test">TEEST</button>
     <script>

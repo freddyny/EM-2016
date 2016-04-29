@@ -142,7 +142,7 @@ function renderData(jsonData) {
             .append(awayGoalsInput);
 
         tr.append(tdResult);
-        var radioboxDiv = $('<div>')
+        /*var radioboxDiv = $('<div>')
             .addClass("radio-div");
 
 
@@ -181,6 +181,24 @@ function renderData(jsonData) {
             .append(checkboxAwayLabel.append(checkBoxAwayInput).append('B'));
         tr.append($('<td>').append(radioboxDiv));
 
+
+        */
+        var HUB = $('<td>').addClass('HUB');
+        ['H','U','B'].forEach(function(teamValue) {
+            var radio = $('<input>')
+                .attr('type', 'radio')
+                .attr('name', 'HUBRadio-'+i)
+                .attr('value', teamValue);
+
+            var label = $('<label>')
+                .addClass('radio-inline')
+                .append(radio)
+                .append(teamValue);
+
+            HUB.append(label);
+        });
+        tr.append(HUB);
+
         // And lastly, we must not forget to append our table row
         // to our table, this should be placed withing <tbody>
         $("table.match-table > tbody").append(tr);
@@ -188,45 +206,52 @@ function renderData(jsonData) {
 }
 
 
-    function getRadioVal(tr,name) {
-        var radios = tr.find('.radio-div');
-        console.debug(radios.text());
-        var val;
-        for (var i=0, len=radios.length; i<len; i++) {
 
-                console.debug("Er I Radios Length");
-
-                val = radios[i].value;
-                break;
-
-        }
-        return val;
-    }
 
 
 
 
 // Code from #1 below:
-$("button.group-test").bind('click', getDataAndSend);
+$('.input_JSON').bind('click', getDataAndSend);
 function getDataAndSend() {
     console.debug("ER I GETDATAANDSEND");
     var bettingData = [];
-    var index = 0;
-    $("table.match-table > tbody > tr").each(function() {
+    $("table.match-table > tbody > tr").each(function(i) {
         var matchBet = {};
         var tr = $(this);
         matchBet.matchNumber = tr.find('.match-nr').text();
         matchBet.homeGoals = tr.find('input[name="home-goals"]').val();
         matchBet.awayGoals = tr.find('input[name="away-goals"]').val();
-        matchBet.HUB = getRadioVal($(tr,'HUB'+index.toString()));
+        matchBet.HUB = tr.find('input[name="HUBRadio-'+i+'"]:checked').val();
         bettingData.push(matchBet);
-        index = index+=1;
 
     });
-    var group = {}
+    group = {};
     group.matches = bettingData;
+    var json = JSON.stringify(group);
     console.debug(group);
     $('input[name="group"]').val(group);
+}
+
+$('.group-button').bind('click', getDataAndSend);
+function getDataAndSend() {
+    console.debug("ER I GETDATAANDSEND");
+    var bettingData = [];
+    $("table.match-table > tbody > tr").each(function(i) {
+        var matchBet = {};
+        var tr = $(this);
+        matchBet.matchNumber = tr.find('.match-nr').text();
+        matchBet.homeGoals = tr.find('input[name="home-goals"]').val();
+        matchBet.awayGoals = tr.find('input[name="away-goals"]').val();
+        matchBet.HUB = tr.find('input[name="HUBRadio-'+i+'"]:checked').val();
+        bettingData.push(matchBet);
+
+    });
+    group = {};
+    group.matches = bettingData;
+    var json = JSON.stringify(group);
+    console.debug(json);
+    $('input[name="group"]').val(json);
 }
 
 

@@ -1,0 +1,40 @@
+{ "match": [
+  {
+    "matchNumber": 5,
+    "dateTime": "2016-06-12 15:00:00",
+    "tvChannel": "NRK1",
+    "homeTeam": "Tyrkia",
+    "awayTeam": "Kroatia"
+  }, {
+    "matchNumber": 8,
+    "dateTime": "2016-06-13 15:00:00",
+    "tvChannel": "NRK1",
+    "homeTeam": "Spania",
+    "awayTeam": "Tsjekkia"
+  }, {
+    "matchNumber": 20,
+    "dateTime": "2016-06-17 18:00:00",
+    "tvChannel": "TV2",
+    "homeTeam": "Tsjekkia",
+    "awayTeam": "Kroatia"
+  },  {
+    "matchNumber": 21,
+    "dateTime": "2016-06-17 21:00:00",
+    "tvChannel": "TV 2 Zebra",
+    "homeTeam": "Spania",
+    "awayTeam": "Tyrkia"
+  }, {
+    "matchNumber": 31,
+    "dateTime": "2016-06-21 21:00:00",
+    "tvChannel": "TV 2 Zebra",
+    "homeTeam": "Kroatia",
+    "awayTeam": "Spania"
+  }, {
+    "matchNumber": 32,
+    "dateTime": "2016-06-21 21:00:00",
+    "tvChannel": "TV 2",
+    "homeTeam": "Tsjekkia",
+    "awayTeam": "Tyrkia"
+  }],
+  "teams": ["Spania", "Tsjekkia","Tyrkia","Kroatia"]
+}

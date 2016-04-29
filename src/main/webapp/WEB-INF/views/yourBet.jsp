@@ -20,7 +20,7 @@
            </thead>
            <tbody></tbody>
        </table>
-       <input class="btn btn-default" type="submit" name="userName" value="Neste"/>
+       <input class="btn btn-default" type="submit" value="Neste"/>
 
     </form:form>
 

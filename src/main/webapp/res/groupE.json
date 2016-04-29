@@ -1,0 +1,40 @@
+{ "match": [
+  {
+    "matchNumber": 9,
+    "dateTime": "2016-06-13 18:00:00",
+    "tvChannel": "TV 2",
+    "homeTeam": "Irland",
+    "awayTeam": "Sverige"
+  }, {
+    "matchNumber": 10,
+    "dateTime": "2016-06-13 21:00:00",
+    "tvChannel": "TV 2 Zebra",
+    "homeTeam": "Belgia",
+    "awayTeam": "Italia"
+  }, {
+    "matchNumber": 19,
+    "dateTime": "2016-06-17 15:00:00",
+    "tvChannel": "NRK1",
+    "homeTeam": "Italia",
+    "awayTeam": "Sverige"
+  },  {
+    "matchNumber": 22,
+    "dateTime": "2016-06-18 15:00:00",
+    "tvChannel": "TV 2",
+    "homeTeam": "Belgia",
+    "awayTeam": "Irland"
+  }, {
+    "matchNumber": 35,
+    "dateTime": "2016-06-22 21:00:00",
+    "tvChannel": "NRK1",
+    "homeTeam": "Sverige",
+    "awayTeam": "Belgia"
+  }, {
+    "matchNumber": 36,
+    "dateTime": "2016-06-22 21:00:00",
+    "tvChannel": "NRK3",
+    "homeTeam": "Italia",
+    "awayTeam": "Irland"
+  }],
+  "teams": ["Sverige", "Belgia","Italia","Irland"]
+}

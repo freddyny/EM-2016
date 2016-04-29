@@ -1,0 +1,40 @@
+{ "match": [
+  {
+    "matchNumber": 3,
+    "dateTime": "2016-06-11 18:00:00",
+    "tvChannel": "TV 2",
+    "homeTeam": "Wales",
+    "awayTeam": "Slovakia"
+  }, {
+    "matchNumber": 4,
+    "dateTime": "2016-06-11 21:00:00",
+    "tvChannel": "TV2 Zebra",
+    "homeTeam": "England",
+    "awayTeam": "Russland"
+  }, {
+    "matchNumber": 13,
+    "dateTime": "2016-06-15 15:00:00",
+    "tvChannel": "NRK1",
+    "homeTeam": "Russland",
+    "awayTeam": "Slovakia"
+  },  {
+    "matchNumber": 16,
+    "dateTime": "2016-06-16 15:00:00",
+    "tvChannel": "TV 2",
+    "homeTeam": "England",
+    "awayTeam": "Wales"
+  }, {
+    "matchNumber": 28,
+    "dateTime": "2016-06-20 21:00:00",
+    "tvChannel": "NRK1",
+    "homeTeam": "Slovakia",
+    "awayTeam": "England"
+  }, {
+    "matchNumber": 27,
+    "dateTime": "2016-06-20 21:00:00",
+    "tvChannel": "NRK3",
+    "homeTeam": "Russland",
+    "awayTeam": "Wales"
+  }],
+  "teams": ["England", "Russland","Wales","Slovakia"]
+}

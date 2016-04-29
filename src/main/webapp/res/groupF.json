@@ -1,0 +1,40 @@
+{ "match": [
+  {
+    "matchNumber": 12,
+    "dateTime": "2016-06-14 21:00:00",
+    "tvChannel": "TV 2",
+    "homeTeam": "Portugal",
+    "awayTeam": "Island"
+  }, {
+    "matchNumber": 11,
+    "dateTime": "2016-06-14 18:00:00",
+    "tvChannel": "NRK1",
+    "homeTeam": "Østerrike",
+    "awayTeam": "Ungarn"
+  }, {
+    "matchNumber": 23,
+    "dateTime": "2016-06-18 18:00:00",
+    "tvChannel": "NRK1",
+    "homeTeam": "Island",
+    "awayTeam": "Ungarn"
+  },  {
+    "matchNumber": 24,
+    "dateTime": "2016-06-18 21:00:00",
+    "tvChannel": "NRK1",
+    "homeTeam": "Portugal",
+    "awayTeam": "Østerrike"
+  }, {
+    "matchNumber": 33,
+    "dateTime": "2016-06-22 18:00:00",
+    "tvChannel": "TV 2 Zebra",
+    "homeTeam": "Island",
+    "awayTeam": "Østerrike"
+  }, {
+    "matchNumber": 34,
+    "dateTime": "2016-06-22 18:00:00",
+    "tvChannel": "TV 2",
+    "homeTeam": "Ungarn",
+    "awayTeam": "Portugal"
+  }],
+  "teams": ["Island", "Østerrike","Ungarn","Portugal"]
+}

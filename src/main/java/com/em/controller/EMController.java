@@ -6,24 +6,16 @@ package com.em.controller;
 
 
 import com.google.appengine.api.datastore.*;
-import com.google.appengine.repackaged.com.google.datastore.v1.Filter;
-import com.google.appengine.repackaged.com.google.gson.JsonArray;
-import com.google.appengine.repackaged.com.google.gson.JsonObject;
-import com.google.appengine.repackaged.com.google.gson.JsonParser;
-import com.google.appengine.repackaged.com.google.gson.stream.JsonReader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,18 +26,17 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.crypto.Data;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.security.acl.Group;
-import java.util.ArrayList;
+
 
 @Controller
 public class EMController {
 
     private static final Log log = LogFactory.getLog(EMController.class);
-
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 
     @RequestMapping("/test")
@@ -90,7 +81,7 @@ public class EMController {
     }
 
     @RequestMapping(value = "/groupA", method = RequestMethod.POST)
-    public ModelAndView SendToGroupA(@RequestParam("userName") String userName) {
+    public ModelAndView SendToGroupA(@RequestParam("userName") String userName) throws EntityNotFoundException {
         //Login
         UserService userService = UserServiceFactory.getUserService();
         User currentUser = userService.getCurrentUser();
@@ -100,13 +91,14 @@ public class EMController {
                     + userService.createLoginURL("/yourBet"));
         } else {
 
-            BettingUser bettingUser = new BettingUser(userName, currentUser.getEmail());
-            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+            DataStoreUtils.putUserInDataStore(userName);
 
-            ///TODO: KOM HIT: FÅR BESKJED OM AT JEG IKKE KAN BRUKE BETTINGUSER SOM ENTIITET. SE HVA VI GJORDE MED THEME.
-            ///TODO: LAGRE EN ENTITET FOR HVER KAMP. EN ENTITET FOR HVER GRUPPE(TIL Å TIPPE GRUPPESPILLPOS). FINN UT HVA VI GJØR MED GRUPPESPILL
-            ///TODO: START MED Å LAGE EN SIDE HVOR VI LAGER ALLE KAMPENE I DATASTORE MED EN KEY ENKELT Å AKSESSERE.
+            Entity datastoreUser =  DataStoreUtils.getEntityFromDatastore("Users", currentUser.getUserId());
 
+            String userNameD = (String) datastoreUser.getProperty("userName");
+            long score = (long) datastoreUser.getProperty("score");
+
+            System.out.print("Username: \t"+ userNameD + "\tScore: \t" + score);
 
             String jsonString = getJSONFromFile("res/groupA.json");
 
@@ -115,16 +107,13 @@ public class EMController {
             mv.addObject("json",jsonString);
             mv.addObject("groupName","A");
             mv.addObject("nextGroupName","B");
-
-
-            System.out.print("HEYHEYHEY\n\n");
             return mv;
 
         }
 
     }
     @RequestMapping(value = "/groupB", method = RequestMethod.POST)
-    public ModelAndView SendToGroupB(@RequestParam("group") String JSONGroup) {
+    public ModelAndView SendToGroupB(@RequestParam("group") String JSONGroup) throws ParseException {
         //Login
         UserService userService = UserServiceFactory.getUserService();
         User currentUser = userService.getCurrentUser();
@@ -132,27 +121,38 @@ public class EMController {
             return new ModelAndView("redirect:"
                     + userService.createLoginURL("/yourBet"));
         } else {
-            //JsonParser parser = new JsonParser();
-            //JsonObject rootObj = parser.parse(JSONGroup).getAsJsonObject();
-
-            /*Gson gson = new GsonBuilder().create();
-            GroupMatch groupMatch = gson.fromJson(JSONGroup, GroupMatch.class);
-                */
-            System.out.print("ER I POST GROUP B: \n\n" + JSONGroup);
-            System.out.print("\nSKAL HA PRINTET JSON");
-
-            //Entity entityUser = new Entity("bettingUser",currentUser.getUserId());
-
-            ///TODO: HAR FÅTT SENDT INFO TIL DETTE STEDET: BRUK GSON TIL Å FIKSE--> LEGG TIL I DATASTORE (Y) WOOP!
-            ///TODO: LAGE KLASSE FOR GRUPPE OG GRUPPESPILL-KAMP
-
-            String jsonString = getJSONFromFile("res/groupA.json");
-
+            System.out.println("JSON: \t" + JSONGroup);
+            DataStoreUtils.putGroupInDatastore(JSONGroup);
+            String newJsonString = getJSONFromFile("res/groupB.json");
 
             ModelAndView mv = new ModelAndView("group", "user",currentUser );
-            mv.addObject("json",jsonString);
+            mv.addObject("json",newJsonString);
             mv.addObject("groupName","B");
+            mv.addObject("nextGroupName","C");
 
+            return mv;
+
+        }
+
+    }
+
+    @RequestMapping(value = "/groupC", method = RequestMethod.POST)
+    public ModelAndView SendToGroupC(@RequestParam("group") String JSONGroup) throws ParseException {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/yourBet"));
+        } else {
+            System.out.println("JSON: \t"+JSONGroup);
+            DataStoreUtils.putGroupInDatastore(JSONGroup);
+            String newJsonString = getJSONFromFile("res/groupC.json");
+
+            ModelAndView mv = new ModelAndView("group", "user",currentUser );
+            mv.addObject("json",newJsonString);
+            mv.addObject("groupName","C");
+            mv.addObject("nextGroupName","D");
 
 
             return mv;
@@ -161,6 +161,73 @@ public class EMController {
 
     }
 
+    @RequestMapping(value = "/groupD", method = RequestMethod.POST)
+    public ModelAndView SendToGroupD(@RequestParam("group") String JSONGroup) throws ParseException {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/yourBet"));
+        } else {
+            System.out.println("JSON: \t"+JSONGroup);
+            DataStoreUtils.putGroupInDatastore(JSONGroup);
+            String newJsonString = getJSONFromFile("res/groupD.json");
+
+            ModelAndView mv = new ModelAndView("group", "user",currentUser );
+            mv.addObject("json",newJsonString);
+            mv.addObject("groupName","D");
+            mv.addObject("nextGroupName","E");
+
+            return mv;
+
+        }
+
+    }
+    @RequestMapping(value = "/groupE", method = RequestMethod.POST)
+    public ModelAndView SendToGroupE(@RequestParam("group") String JSONGroup) throws ParseException {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/yourBet"));
+        } else {
+            System.out.println("JSON: \t"+JSONGroup);
+            DataStoreUtils.putGroupInDatastore(JSONGroup);
+            String newJsonString = getJSONFromFile("res/groupE.json");
+
+            ModelAndView mv = new ModelAndView("group", "user",currentUser );
+            mv.addObject("json",newJsonString);
+            mv.addObject("groupName","E");
+            mv.addObject("nextGroupName","F");
+            return mv;
+
+        }
+
+    }
+    @RequestMapping(value = "/groupF", method = RequestMethod.POST)
+    public ModelAndView SendToGroupF(@RequestParam("group") String JSONGroup) throws ParseException {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/yourBet"));
+        } else {
+            System.out.println("JSON: \t"+JSONGroup);
+            DataStoreUtils.putGroupInDatastore(JSONGroup);
+            String newJsonString = getJSONFromFile("res/groupF.json");
+
+            ModelAndView mv = new ModelAndView("group", "user",currentUser );
+            mv.addObject("json",newJsonString);
+            mv.addObject("groupName","F");
+
+            return mv;
+
+        }
+
+    }
 
 
 
