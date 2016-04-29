@@ -8,31 +8,31 @@
   }, {
     "matchNumber": 2,
     "dateTime": "2016-06-11 15:00:00",
-    "tvChannel": "Ukjent",
+    "tvChannel": "NRK1",
     "homeTeam": "Albania",
     "awayTeam": "Sveits"
   }, {
     "matchNumber": 14,
     "dateTime": "2016-06-15 18:00:00",
-    "tvChannel": "Ukjent",
+    "tvChannel": "TV2",
     "homeTeam": "Romania",
     "awayTeam": "Sveits"
   },  {
     "matchNumber": 15,
     "dateTime": "2016-06-15 21:00:00",
-    "tvChannel": "Ukjent",
-    "homeTeam": "England",
-    "awayTeam": "Russland"
-  }, {
-    "matchNumber": 25,
-    "dateTime": "2016-06-19 21:00:00",
-    "tvChannel": "Ukjent",
-    "homeTeam": "Sveits",
-    "awayTeam": "Frankrike"
+    "tvChannel": "NRK1",
+    "homeTeam": "Frankrike",
+    "awayTeam": "Albania"
   }, {
     "matchNumber": 26,
     "dateTime": "2016-06-19 21:00:00",
-    "tvChannel": "Ukjent",
+    "tvChannel": "TV2",
+    "homeTeam": "Sveits",
+    "awayTeam": "Frankrike"
+  }, {
+    "matchNumber": 25,
+    "dateTime": "2016-06-19 21:00:00",
+    "tvChannel": "TV2",
     "homeTeam": "Romania",
     "awayTeam": "Albania"
   }],

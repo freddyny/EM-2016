@@ -1,0 +1,361 @@
+{ "match": [
+  {
+    "matchNumber": 1,
+    "dateTime": "2016-06-10 21:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Frankrike",
+    "awayTeam": "Romania"
+  }, {
+    "matchNumber": 2,
+    "dateTime": "2016-06-11 15:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Albania",
+    "awayTeam": "Sveits"
+  }, {
+    "matchNumber": 14,
+    "dateTime": "2016-06-15 18:00:00",
+    "tvChannel": "TV2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Romania",
+    "awayTeam": "Sveits"
+  },  {
+    "matchNumber": 15,
+    "dateTime": "2016-06-15 21:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Frankrike",
+    "awayTeam": "Albania"
+  }, {
+    "matchNumber": 26,
+    "dateTime": "2016-06-19 21:00:00",
+    "tvChannel": "TV2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Sveits",
+    "awayTeam": "Frankrike"
+  }, {
+    "matchNumber": 25,
+    "dateTime": "2016-06-19 21:00:00",
+    "tvChannel": "TV2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Romania",
+    "awayTeam": "Albania"
+  }, {
+    "matchNumber": 3,
+    "dateTime": "2016-06-11 18:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Wales",
+    "awayTeam": "Slovakia"
+  }, {
+    "matchNumber": 4,
+    "dateTime": "2016-06-11 21:00:00",
+    "tvChannel": "TV2 Zebra",
+    "matchType": "Gruppespill",
+    "homeTeam": "England",
+    "awayTeam": "Russland"
+  }, {
+    "matchNumber": 13,
+    "dateTime": "2016-06-15 15:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Russland",
+    "awayTeam": "Slovakia"
+  },  {
+    "matchNumber": 16,
+    "dateTime": "2016-06-16 15:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Gruppespill",
+    "homeTeam": "England",
+    "awayTeam": "Wales"
+  }, {
+    "matchNumber": 28,
+    "dateTime": "2016-06-20 21:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Slovakia",
+    "awayTeam": "England"
+  }, {
+    "matchNumber": 27,
+    "dateTime": "2016-06-20 21:00:00",
+    "tvChannel": "NRK3",
+    "matchType": "Gruppespill",
+    "homeTeam": "Russland",
+    "awayTeam": "Wales"
+  }, {
+    "matchNumber": 6,
+    "dateTime": "2016-06-12 18:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Polen",
+    "awayTeam": "Nord-Irland"
+  }, {
+    "matchNumber": 7,
+    "dateTime": "2016-06-12 21:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Tyskland",
+    "awayTeam": "Ukraina"
+  }, {
+    "matchNumber": 17,
+    "dateTime": "2016-06-16 18:00:00",
+    "tvChannel": "TV2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Ukraina",
+    "awayTeam": "Nord-Irland"
+  },  {
+    "matchNumber": 18,
+    "dateTime": "2016-06-16 21:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Tyskland",
+    "awayTeam": "Polen"
+  }, {
+    "matchNumber": 30,
+    "dateTime": "2016-06-21 18:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Nord-Irland",
+    "awayTeam": "Tyskland"
+  }, {
+    "matchNumber": 29,
+    "dateTime": "2016-06-21 18:00:00",
+    "tvChannel": "NRK2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Ukraina",
+    "awayTeam": "Polen"
+  }, {
+    "matchNumber": 5,
+    "dateTime": "2016-06-12 15:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Tyrkia",
+    "awayTeam": "Kroatia"
+  }, {
+    "matchNumber": 8,
+    "dateTime": "2016-06-13 15:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Spania",
+    "awayTeam": "Tsjekkia"
+  }, {
+    "matchNumber": 20,
+    "dateTime": "2016-06-17 18:00:00",
+    "tvChannel": "TV2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Tsjekkia",
+    "awayTeam": "Kroatia"
+  },  {
+    "matchNumber": 21,
+    "dateTime": "2016-06-17 21:00:00",
+    "tvChannel": "TV 2 Zebra",
+    "matchType": "Gruppespill",
+    "homeTeam": "Spania",
+    "awayTeam": "Tyrkia"
+  }, {
+    "matchNumber": 31,
+    "dateTime": "2016-06-21 21:00:00",
+    "tvChannel": "TV 2 Zebra",
+    "matchType": "Gruppespill",
+    "homeTeam": "Kroatia",
+    "awayTeam": "Spania"
+  }, {
+    "matchNumber": 32,
+    "dateTime": "2016-06-21 21:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Tsjekkia",
+    "awayTeam": "Tyrkia"
+  }, {
+    "matchNumber": 9,
+    "dateTime": "2016-06-13 18:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Irland",
+    "awayTeam": "Sverige"
+  }, {
+    "matchNumber": 10,
+    "dateTime": "2016-06-13 21:00:00",
+    "tvChannel": "TV 2 Zebra",
+    "matchType": "Gruppespill",
+    "homeTeam": "Belgia",
+    "awayTeam": "Italia"
+  }, {
+    "matchNumber": 19,
+    "dateTime": "2016-06-17 15:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Italia",
+    "awayTeam": "Sverige"
+  },  {
+    "matchNumber": 22,
+    "dateTime": "2016-06-18 15:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Belgia",
+    "awayTeam": "Irland"
+  }, {
+    "matchNumber": 35,
+    "dateTime": "2016-06-22 21:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Sverige",
+    "awayTeam": "Belgia"
+  }, {
+    "matchNumber": 36,
+    "dateTime": "2016-06-22 21:00:00",
+    "tvChannel": "NRK3",
+    "matchType": "Gruppespill",
+    "homeTeam": "Italia",
+    "awayTeam": "Irland"
+  }, {
+    "matchNumber": 12,
+    "dateTime": "2016-06-14 21:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Portugal",
+    "awayTeam": "Island"
+  }, {
+    "matchNumber": 11,
+    "dateTime": "2016-06-14 18:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Østerrike",
+    "awayTeam": "Ungarn"
+  }, {
+    "matchNumber": 23,
+    "dateTime": "2016-06-18 18:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Island",
+    "awayTeam": "Ungarn"
+  },  {
+    "matchNumber": 24,
+    "dateTime": "2016-06-18 21:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Gruppespill",
+    "homeTeam": "Portugal",
+    "awayTeam": "Østerrike"
+  }, {
+    "matchNumber": 33,
+    "dateTime": "2016-06-22 18:00:00",
+    "tvChannel": "TV 2 Zebra",
+    "matchType": "Gruppespill",
+    "homeTeam": "Island",
+    "awayTeam": "Østerrike"
+  }, {
+    "matchNumber": 34,
+    "dateTime": "2016-06-22 18:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Gruppespill",
+    "homeTeam": "Ungarn",
+    "awayTeam": "Portugal"
+  }, {
+    "matchNumber": 37,
+    "dateTime": "2016-06-25 15:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "8-Delsfinale",
+    "homeTeam": "A2",
+    "awayTeam": "C2"
+  }, {
+    "matchNumber": 38,
+    "dateTime": "2016-06-25 18:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "8-Delsfinale",
+    "homeTeam": "B1",
+    "awayTeam": "A/C/D3"
+  }, {
+    "matchNumber": 39,
+    "dateTime": "2016-06-25 21:00:00",
+    "tvChannel": "TV 2 Zebra",
+    "matchType": "8-Delsfinale",
+    "homeTeam": "D1",
+    "awayTeam": "B/E/F3"
+  },  {
+    "matchNumber": 40,
+    "dateTime": "2016-06-26 15:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "8-Delsfinale",
+    "homeTeam": "A1",
+    "awayTeam": "C/D/E3"
+  }, {
+    "matchNumber": 41,
+    "dateTime": "2016-06-26 18:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "8-Delsfinale",
+    "homeTeam": "C1",
+    "awayTeam": "A/B/F3"
+  }, {
+    "matchNumber": 42,
+    "dateTime": "2016-06-26 21:00:00",
+    "tvChannel": "TV 2 Zebra",
+    "matchType": "8-Delsfinale",
+    "homeTeam": "F1",
+    "awayTeam": "E2"
+  },  {
+    "matchNumber": 43,
+    "dateTime": "2016-06-27 18:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "8-Delsfinale",
+    "homeTeam": "E1",
+    "awayTeam": "D2"
+  }, {
+    "matchNumber": 44,
+    "dateTime": "2016-06-27 21:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "8-Delsfinale",
+    "homeTeam": "B2",
+    "awayTeam": "F2"
+  }, {
+    "matchNumber": 45,
+    "dateTime": "2016-06-30 21:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Kvartfinale",
+    "homeTeam": "M37",
+    "awayTeam": "M39"
+  },  {
+    "matchNumber": 46,
+    "dateTime": "2016-07-01 21:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Kvartfinale",
+    "homeTeam": "M38",
+    "awayTeam": "M42"
+  }, {
+    "matchNumber": 47,
+    "dateTime": "2016-07-02 21:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Kvartfinale",
+    "homeTeam": "M41",
+    "awayTeam": "M43"
+  }, {
+    "matchNumber": 48,
+    "dateTime": "2016-07-03 21:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Kvartfinale",
+    "homeTeam": "M40",
+    "awayTeam": "M44"
+  }, {
+    "matchNumber": 49,
+    "dateTime": "2016-07-06 21:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Semifinale",
+    "homeTeam": "M45",
+    "awayTeam": "M46"
+  }, {
+    "matchNumber": 50,
+    "dateTime": "2016-07-07 21:00:00",
+    "tvChannel": "TV 2",
+    "matchType": "Semifinale",
+    "homeTeam": "M47",
+    "awayTeam": "M48"
+  }, {
+    "matchNumber": 51,
+    "dateTime": "2016-07-10 21:00:00",
+    "tvChannel": "NRK1",
+    "matchType": "Finale",
+    "homeTeam": "M49",
+    "awayTeam": "M50"
+  }]
+
+}

@@ -18,8 +18,8 @@
     <link type="text/css" rel="stylesheet" href="/stylesheets/form.css"/''>
     <script src="<c:url value="/js/jquery1.11.1.min.js"/>"></script>
     <script src="<c:url value="/js/bootstrap.min.js"/>"></script>
-
-
+    <link rel="shortcut icon" href="http://www.uefa.com/imgml/favicon/comp/euro2016.ico">
+    <link rel="icon" href="http://www.uefa.com/imgml/favicon/comp/euro2016.ico" type="image/x-icon">
 </head>
 <body>
 <script>
@@ -43,13 +43,15 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li class="active"><a href="/yourBet">Ditt Spill <span class="sr-only">(current)</span></a></li>
-                <li class="dropdown">
+                <li ><a href="/yourBet">Ditt Spill</a></li>
+                <li ><a href="/matches">Kampoppsett </a></li>
+
+                <!--<li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                   <ul class="dropdown-menu">
                     <li><a href="#">Action</a></li>
                   </ul>
-                </li>
+                </li>-->
               </ul>
               <ul class="nav navbar-nav navbar-right">
                   <%

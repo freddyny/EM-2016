@@ -8,9 +8,34 @@ input[type="number"] {
     padding: 0;
 }
 
+ol>li {
+    width: 30% !important;
+
+}
 
 .navbar-brand>img {
     height: 100%;
     padding-right: 10px;
     background: white;
 }
+
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+
+ol.sort-teams li.placeholder {
+  position: relative;
+  /** More li styles **/
+}
+ol.sort-teams li.placeholder:before {
+  position: absolute;
+  /** Define arrowhead **/
+}
+
+

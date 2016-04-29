@@ -10,15 +10,6 @@ public class BettingUser {
     private String userName;
     private int score;
 
-    GroupStageBet groupA;
-    GroupStageBet groupB;
-    GroupStageBet groupC;
-    GroupStageBet groupD;
-    GroupStageBet groupE;
-    GroupStageBet groupF;
-    GroupStageBet groupG;
-    GroupStageBet groupH;
-
 
 
 

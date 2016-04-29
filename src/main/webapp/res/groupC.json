@@ -1,0 +1,40 @@
+{ "match": [
+  {
+    "matchNumber": 6,
+    "dateTime": "2016-06-12 18:00:00",
+    "tvChannel": "TV 2",
+    "homeTeam": "Polen",
+    "awayTeam": "Nord-Irland"
+  }, {
+    "matchNumber": 7,
+    "dateTime": "2016-06-12 21:00:00",
+    "tvChannel": "NRK1",
+    "homeTeam": "Tyskland",
+    "awayTeam": "Ukraina"
+  }, {
+    "matchNumber": 17,
+    "dateTime": "2016-06-16 18:00:00",
+    "tvChannel": "TV2",
+    "homeTeam": "Ukraina",
+    "awayTeam": "Nord-Irland"
+  },  {
+    "matchNumber": 18,
+    "dateTime": "2016-06-16 21:00:00",
+    "tvChannel": "NRK1",
+    "homeTeam": "Tyskland",
+    "awayTeam": "Polen"
+  }, {
+    "matchNumber": 30,
+    "dateTime": "2016-06-21 18:00:00",
+    "tvChannel": "NRK1",
+    "homeTeam": "Nord-Irland",
+    "awayTeam": "Tyskland"
+  }, {
+    "matchNumber": 29,
+    "dateTime": "2016-06-21 18:00:00",
+    "tvChannel": "NRK2",
+    "homeTeam": "Ukraina",
+    "awayTeam": "Polen"
+  }],
+  "teams": ["Nord-Irland", "Tyskland","Ukraina","Polen"]
+}
