@@ -45,7 +45,8 @@
               <ul class="nav navbar-nav">
                 <li ><a href="/yourBet">Ditt Spill</a></li>
                 <li ><a href="/matches">Kampoppsett </a></li>
-
+                <li ><a href="/rules">Regler </a></li>
+                <li ><a href="/scores">Leaderboard</a></li>
                 <!--<li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                   <ul class="dropdown-menu">

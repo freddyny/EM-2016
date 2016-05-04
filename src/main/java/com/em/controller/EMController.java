@@ -26,10 +26,11 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.crypto.Data;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -56,6 +57,46 @@ public class EMController {
 
     }
 
+
+    @RequestMapping(value = "/rules", method = RequestMethod.GET)
+    public ModelAndView rules() {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/"));
+        } else {
+            return new ModelAndView("rules");
+
+        }
+
+    }
+
+
+    @RequestMapping(value = "/scores", method = RequestMethod.GET)
+    public ModelAndView scores() {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/"));
+        } else {
+            String json = MemcacheUtils.getScores();
+            ModelAndView mv = new ModelAndView("scores", "json",json);
+
+            return mv;
+
+        }
+
+    }
+
+
     @RequestMapping(value = "/yourBet", method = RequestMethod.GET)
     public ModelAndView spill() {
         //Login
@@ -66,10 +107,43 @@ public class EMController {
             return new ModelAndView("redirect:"
                     + userService.createLoginURL("/yourBet"));
         } else {
-            ModelAndView mv = new ModelAndView("yourBet", "user",currentUser );
+            ModelAndView mv = new ModelAndView("yourBet", "user",currentUser.getNickname() );
             return mv;
 
 
+        }
+
+    }
+
+    @RequestMapping(value = "/addScore", method = RequestMethod.GET)
+    public ModelAndView scoreADd() {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/yourBet"));
+        } else {
+            ModelAndView mv = new ModelAndView("addScore", "user",currentUser.getNickname() );
+            return mv;
+        }
+    }
+
+    @RequestMapping(value = "/addScore", method = RequestMethod.POST)
+    public ModelAndView scoreADdPost(@RequestParam("userName") String userName, @RequestParam("score") int score) {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/yourBet"));
+        } else {
+            DataStoreUtils.putUserInDataStore(userName,score);
+
+            ModelAndView mv = new ModelAndView("index", "user",currentUser.getNickname() );
+            return mv;
         }
 
     }
@@ -85,14 +159,10 @@ public class EMController {
                     + userService.createLoginURL("/yourBet"));
         } else {
 
-            DataStoreUtils.putUserInDataStore(userName);
+            DataStoreUtils.putUserInDataStore(userName,0);
+            log.info("Skal legge til bruker i Datastore og oppdatere Memcache.");
+            MemcacheUtils.putScores();
 
-            Entity datastoreUser =  DataStoreUtils.getEntityFromDatastore("Users", currentUser.getUserId());
-
-            String userNameD = (String) datastoreUser.getProperty("userName");
-            long score = (long) datastoreUser.getProperty("score");
-
-            System.out.print("Username: \t"+ userNameD + "\tScore: \t" + score);
 
             String jsonString = getJSONFromFile("res/groupA.json");
 

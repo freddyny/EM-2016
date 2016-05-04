@@ -29,7 +29,7 @@
            </thead>
            <tbody></tbody>
        </table>
-       <input type="hidden" class="input_JSON" name="group" value="" />
+       <input type="hidden" class="input_JSON" name="group" required />
        <input type="hidden" class="nextGroup" name="nextGroup" value="" />
 
        <p>Sorter listen i den rekkefølgen du tror gruppen ender</p>

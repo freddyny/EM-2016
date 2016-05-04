@@ -258,6 +258,7 @@ $('.group-button').bind('click', getDataAndSend);
 function getDataAndSend() {
     console.debug("ER I GETDATAANDSEND");
     var bettingData = [];
+    var validated = true;
     $("table.match-table > tbody > tr").each(function(i) {
         var matchBet = {};
         var tr = $(this);

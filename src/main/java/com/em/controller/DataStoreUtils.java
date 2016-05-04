@@ -7,6 +7,9 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by frederiknygaard on 28.04.16.
  */
@@ -38,7 +41,7 @@ public class DataStoreUtils {
 
     }
 
-    public static void putUserInDataStore(String userName){
+    public static void putUserInDataStore(String userName,int score){
         UserService userService = UserServiceFactory.getUserService();
         User currentUser = userService.getCurrentUser();
 
@@ -46,7 +49,7 @@ public class DataStoreUtils {
 
 
         Entity user = new Entity("Users", currentUser.getUserId());
-        user.setProperty("score", 0);
+        user.setProperty("score", score);
         user.setProperty("userName", userName);
 
         datastore.put(user);
@@ -65,4 +68,33 @@ public class DataStoreUtils {
     }
 
 
+    public static List<Entity> getAllUsersFromDatastore(String tableName){
+        return getPreparedQuery(tableName,true,"score").asList(FetchOptions.Builder.withDefaults());
+
+    }
+
+    private static PreparedQuery getPreparedQuery(String kind,boolean sorted, String sortProperty){
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query q;
+        if(sorted){
+            q = new Query(kind).addSort(sortProperty, Query.SortDirection.DESCENDING);;
+        }
+        else{
+            q = new Query(kind);
+        }
+        return datastore.prepare(q);
+    }
+
+    public static String userDataStoreToJSON(String tableName){
+        List<Entity> entities = getAllUsersFromDatastore(tableName);
+        ArrayList<BettingUser> bettingUsers = new ArrayList<BettingUser>();
+        for(Entity e:entities){
+            BettingUser bu = new BettingUser(e);
+            bettingUsers.add(bu);
+
+        }
+        Gson gson = new Gson();
+        String json = gson.toJson(bettingUsers);
+        return json;
+    }
 }
