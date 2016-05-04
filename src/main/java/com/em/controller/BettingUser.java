@@ -1,5 +1,7 @@
 package com.em.controller;
 
+import com.google.appengine.api.datastore.Entity;
+
 import java.util.ArrayList;
 
 /**
@@ -8,7 +10,7 @@ import java.util.ArrayList;
 public class BettingUser {
     private String email;
     private String userName;
-    private int score;
+    private long score;
 
 
 
@@ -21,6 +23,12 @@ public class BettingUser {
         this.score = 99;
     }
 
+
+    public BettingUser(Entity e){
+
+        userName = (String) e.getProperty("userName");
+        score = (long) e.getProperty("score");
+    }
 
     public BettingUser(String userName, String email){
         this.userName = userName;
@@ -41,7 +49,7 @@ public class BettingUser {
     }
 
 
-    public int getScore() {
+    public long getScore() {
         return score;
     }
 

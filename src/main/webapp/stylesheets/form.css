@@ -38,4 +38,16 @@ ol.sort-teams li.placeholder:before {
   /** Define arrowhead **/
 }
 
+.h2, h2 {
+    font-size: 47px !important;
+}
+
+.h3, h3 {
+    font-size: 37px !important;
+}
+.h4, h4 {
+    font-size: 25px !important;
+    text-decoration: underline;
+
+}
 
