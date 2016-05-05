@@ -14,6 +14,7 @@
 <head>
     <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap.min.css"/''>
     <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css"/''>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap-select.min.css"/''>
     <link type="text/css" rel="stylesheet" href="/stylesheets/template.css"/>
     <link type="text/css" rel="stylesheet" href="/stylesheets/form.css"/''>
     <script src="<c:url value="/js/jquery1.11.1.min.js"/>"></script>

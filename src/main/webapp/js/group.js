@@ -144,7 +144,7 @@ function renderData(jsonData) {
         var homeGoalsInput = $('<input>');
 
         // We set attributes to the input usning .attr(field, value)
-        homeGoalsInput.attr('type', 'number').attr('name', 'home-goals');
+        homeGoalsInput.attr('type', 'number').attr('name', 'home-goals').attr('value','0');
 
         // Classes are added using .addClass()
         homeGoalsInput.addClass('form-control');
@@ -153,6 +153,7 @@ function renderData(jsonData) {
         var awayGoalsInput = $('<input>')
             .attr('type', 'number')
             .attr('name', 'away-goals')
+            .attr('value','0')
             .addClass('form-control');
 
         // Note that even though we created the input elements,
@@ -208,12 +209,17 @@ function renderData(jsonData) {
         ['H','U','B'].forEach(function(teamValue) {
             var radio = $('<input>')
                 .attr('type', 'radio')
-                .attr('name', 'HUBRadio-'+i)
+                .attr('name', 'HUBRadio-'+match.matchNumber)
                 .attr('value', teamValue);
 
+
             var label = $('<label>')
-                .addClass('radio-inline')
-                .append(radio)
+                .addClass('radio-inline');
+                if (teamValue == 'H'){
+                    radio.attr('checked','').addClass;
+                    label.addClass('active');
+                }
+                label.append(radio)
                 .append(teamValue);
 
             HUB.append(label);
@@ -243,7 +249,7 @@ function getDataAndSend() {
         matchBet.matchNumber = tr.find('.match-nr').text();
         matchBet.homeGoals = tr.find('input[name="home-goals"]').val();
         matchBet.awayGoals = tr.find('input[name="away-goals"]').val();
-        matchBet.HUB = tr.find('input[name="HUBRadio-'+i+'"]:checked').val();
+        matchBet.HUB = tr.find('input[name="HUBRadio-'+matchBet.matchNumber+'"]:checked').val();
         bettingData.push(matchBet);
 
     });

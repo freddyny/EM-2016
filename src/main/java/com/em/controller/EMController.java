@@ -57,6 +57,23 @@ public class EMController {
 
     }
 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public ModelAndView test() {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/"));
+        } else {
+            return new ModelAndView("test", "user",currentUser.getEmail() );
+
+        }
+
+    }
+
 
     @RequestMapping(value = "/rules", method = RequestMethod.GET)
     public ModelAndView rules() {
@@ -170,7 +187,7 @@ public class EMController {
             ModelAndView mv = new ModelAndView("group", "user",currentUser );
             mv.addObject("json",jsonString);
             mv.addObject("groupName","A");
-            mv.addObject("nextGroupName","B");
+            mv.addObject("nextGroupName", "B");
             return mv;
 
         }
@@ -187,26 +204,76 @@ public class EMController {
         //Login
         UserService userService = UserServiceFactory.getUserService();
         User currentUser = userService.getCurrentUser();
-        System.out.println("NEXT GROUP:    \n"+thisGroup+"\n");
         if (currentUser == null) {
             return new ModelAndView("redirect:"
                     + userService.createLoginURL("/yourBet"));
         } else {
             System.out.println("JSON: \t" + JSONGroup);
             DataStoreUtils.putGroupInDatastore(JSONGroup);
-            String newJsonString = getJSONFromFile("res/group" + thisGroup + ".json");
+            String nextGroup = getNextGroup(thisGroup);
+            if (thisGroup.equals("Done")){
+                String newJsonString = getJSONFromFile("res/kampoppsett.json");
+                System.out.println("ER I GROUP DONE");
+                //NAVIGER TIL UTSLAGSRUNDER.
+                String thisKnockout = "8-Delsfinale";
+                ModelAndView mv = new ModelAndView("knockout", "user",currentUser );
+                mv.addObject("json",newJsonString);
+                mv.addObject("knockout",thisKnockout);
+                mv.addObject("nextKnockout", getNextKnockout(thisKnockout));
 
-            ModelAndView mv = new ModelAndView("group", "user",currentUser );
-            mv.addObject("json",newJsonString);
-            mv.addObject("groupName",thisGroup);
-            mv.addObject("nextGroupName",getNextGroup(thisGroup));
-            return mv;
+                return mv;
+            }
+            else{
+                String newJsonString = getJSONFromFile("res/group" + thisGroup + ".json");
+                ModelAndView mv = new ModelAndView("group", "user",currentUser );
+                mv.addObject("json",newJsonString);
+                mv.addObject("groupName",thisGroup);
+                mv.addObject("nextGroupName",nextGroup);
+                return mv;
+
+            }
 
         }
+    }
+    @RequestMapping(value = "/knockout", method = RequestMethod.POST)
+    public ModelAndView knockOut(@RequestParam("group")String JSONKnockout,
+                                 @RequestParam("nextKnockout")String thisKnockout) throws EntityNotFoundException {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/yourBet"));
+        } else {
+            if (thisKnockout.equals("Vinner")){
+                ModelAndView mv = new ModelAndView("vinner", "user",currentUser );
+                String newJsonString = getJSONFromFile("res/kampoppsett.json");
+                mv.addObject("json",newJsonString);
+                return mv;
+            }
+            else{
+                    //Legg inn i DATASTORE.
+                System.out.println(JSONKnockout);
+
+                DataStoreUtils.putKnockoutInDatastore(JSONKnockout);
+                String nextKnockout = getNextKnockout(thisKnockout);
 
 
+                String newJsonString = getJSONFromFile("res/kampoppsett.json");
+                ModelAndView mv = new ModelAndView("knockout", "user",currentUser );
+                mv.addObject("json",newJsonString);
+                mv.addObject("knockout", thisKnockout);
+                mv.addObject("nextKnockout", nextKnockout);
+                return mv;
+            }
+        }
 
     }
+
+
+
+
 
     @RequestMapping(value = "/addUser", method = RequestMethod.GET)
     public ModelAndView addUser() {
@@ -223,7 +290,7 @@ public class EMController {
 
                 String jsonString = getJSONFromFile("res/data.json");
                 mv.addObject("data",jsonString);
-                mv.addObject("groupName","A");
+                mv.addObject("groupName", "A");
 
                 return mv;
 
@@ -267,7 +334,7 @@ public class EMController {
             String jsonString = getJSONFromFile("res/kampoppsett.json");
             ModelAndView mv = new ModelAndView("matches");
 
-            mv.addObject("data",jsonString);
+            mv.addObject("data", jsonString);
             return mv;
         }
     }
@@ -312,6 +379,25 @@ public class EMController {
                 return "F";
             case "F":
                 return "Done";
+            default:
+                return "";
+
+        }
+
+    }
+
+    private String getNextKnockout(String thisKnockOut){
+        switch(thisKnockOut){
+            case "8-Delsfinale":
+                return "Kvartfinale";
+            case "Kvartfinale":
+                return "Semifinale";
+            case "Semifinale":
+                return "Finale";
+            case "Finale":
+                return "Vinner";
+            case "Vinner":
+                return "Ferdig";
             default:
                 return "";
 

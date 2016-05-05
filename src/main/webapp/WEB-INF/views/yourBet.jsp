@@ -9,6 +9,7 @@
 
 </head>
 <body>
+    <h1>Brukernavn</h1>
     <p>Legg til brukernavn</p>
     <form:form method="POST" action="/groupA">
        <table class="table username-table">

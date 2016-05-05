@@ -15,7 +15,8 @@ ol>li {
 
 .navbar-brand>img {
     height: 100%;
-    padding-right: 10px;
+    padding-left: 10px;
+    padding-right: 26px;
     background: white;
 }
 

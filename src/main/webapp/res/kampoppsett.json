@@ -356,6 +356,8 @@
     "matchType": "Finale",
     "homeTeam": "M49",
     "awayTeam": "M50"
-  }]
-
+  }],
+  "teams": ["Frankrike", "Romania","Albania","Sveits","England", "Russland","Wales","Slovakia","Nord-Irland", "Tyskland","Ukraina","Polen",
+            "Spania", "Tsjekkia","Tyrkia","Kroatia","Sverige", "Belgia","Italia","Irland","Island", "Østerrike","Ungarn","Portugal"
+  ]
 }
