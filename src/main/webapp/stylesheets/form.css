@@ -52,3 +52,7 @@ ol.sort-teams li.placeholder:before {
 
 }
 
+
+.form-control {
+    width:40%;
+}

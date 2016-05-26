@@ -11,7 +11,7 @@
 <body>
     <h1>Vinner</h1>
     <p>Legg til hvem du tror kommer til å vinne em. Dette teller 20 poeng. </p>
-    <form:form method="POST" action="/toppscorer">
+    <form:form method="POST" action="/players">
        <table class="table winner-table">
            <thead>
                <tr>
@@ -21,7 +21,8 @@
            </thead>
            <tbody></tbody>
        </table>
-       <input class="btn btn-default" type="submit" value="Neste"/>
+       <input class="btn btn-default winner-btn" type="submit" value="Neste"/>
+       <input type="hidden" class="input_JSON" name="winner" required />
 
     </form:form>
 

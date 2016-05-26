@@ -7,7 +7,7 @@ public class KnockoutMatch extends Match {
     private String homeTeam;
     private String awayTeam;
 
-    public KnockoutMatch(int home, int away, int nr, char hub, String homeTeam, String awayTeam) {
+    public KnockoutMatch(long home, long away, int nr, char hub, String homeTeam, String awayTeam) {
         setHomeGoals(home);
         setAwayGoals(away);
         setHUB(hub);

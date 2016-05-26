@@ -4,26 +4,26 @@ package com.em.controller;
  * Created by frederiknygaard on 04.05.16.
  */
 public abstract class Match {
-    private int homeGoals;
-    private int awayGoals;
+    private long homeGoals;
+    private long awayGoals;
     private char HUB;
     private int matchNumber;
 
 
 
-    public int getHomeGoals() {
+    public long getHomeGoals() {
         return homeGoals;
     }
 
-    public void setHomeGoals(int homeGoals) {
+    public void setHomeGoals(long homeGoals) {
         this.homeGoals = homeGoals;
     }
 
-    public int getAwayGoals() {
+    public long getAwayGoals() {
         return awayGoals;
     }
 
-    public void setAwayGoals(int awayGoals) {
+    public void setAwayGoals(long awayGoals) {
         this.awayGoals = awayGoals;
     }
 

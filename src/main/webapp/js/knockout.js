@@ -89,8 +89,8 @@ function renderData(jsonData) {
             // extract our date and time, we can do this
             // by creating two additional functions,
             // getDateString(date) and getTimeString(date)
-            tr.append('<td>'+improvedGetDateString(match.dateTime)+'</td>');
-            tr.append('<td>'+improvedGetTimeString(match.dateTime)+'</td>');
+            tr.append($('<td>').append(match.homeTeam));
+            tr.append($('<td>').append(match.awayTeam));
 
             // Previously, we have appended each 'td' simply with strings,
             // we can also create them as nodes before appending:

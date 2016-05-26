@@ -37,9 +37,10 @@
            <ol class='sort-teams list-group'>
            </ol>
 
-       </div>
        <button class="btn btn-default group-button" type="submit" >Neste</button>
     </form:form>
+
+
 
     <script src='js/jquery-sortable.js'></script>
     <script>

@@ -20,8 +20,17 @@ function renderData(jsonData) {
         select.append(option);
 
     }
+    var tdVinner = $('<td>').addClass("vinner");
+    tdVinner.append(select);
 
-    tr.append(select);
+    tr.append(tdVinner);
     $("table.winner-table > tbody").append(tr);
 
+}
+
+$('.winner-btn').bind('click', getDataAndSend);
+function getDataAndSend() {
+    var tr = $("table.winner-table > tbody > tr")
+    var winner = tr.find('.vinner>div>button').attr('title');
+    $('input[name="winner"]').val(winner);
 }

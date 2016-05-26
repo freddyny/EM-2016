@@ -144,7 +144,7 @@ function renderData(jsonData) {
         var homeGoalsInput = $('<input>');
 
         // We set attributes to the input usning .attr(field, value)
-        homeGoalsInput.attr('type', 'number').attr('name', 'home-goals').attr('value','0');
+        homeGoalsInput.attr('type', 'number').attr('name', 'home-goals').attr('min','0').attr('value','0');
 
         // Classes are added using .addClass()
         homeGoalsInput.addClass('form-control');
@@ -154,6 +154,7 @@ function renderData(jsonData) {
             .attr('type', 'number')
             .attr('name', 'away-goals')
             .attr('value','0')
+            .attr('min','0')
             .addClass('form-control');
 
         // Note that even though we created the input elements,
@@ -241,7 +242,7 @@ function renderData(jsonData) {
 // Code from #1 below:
 $('.input_JSON').bind('click', getDataAndSend);
 function getDataAndSend() {
-    console.debug("ER I GETDATAANDSEND");
+    console.debug("NYHET:::: ER I GETDATAANDSEND");
     var bettingData = [];
     $("table.match-table > tbody > tr").each(function(i) {
         var matchBet = {};
@@ -249,7 +250,8 @@ function getDataAndSend() {
         matchBet.matchNumber = tr.find('.match-nr').text();
         matchBet.homeGoals = tr.find('input[name="home-goals"]').val();
         matchBet.awayGoals = tr.find('input[name="away-goals"]').val();
-        matchBet.HUB = tr.find('input[name="HUBRadio-'+matchBet.matchNumber+'"]:checked').val();
+        matchBet.HUB = $('tr>td >label> input[name="HUBRadio-'+matchBet.matchNumber+'"]:checked').val();
+
         bettingData.push(matchBet);
 
     });
@@ -271,7 +273,7 @@ function getDataAndSend() {
         matchBet.matchNumber = tr.find('.match-nr').text();
         matchBet.homeGoals = tr.find('input[name="home-goals"]').val();
         matchBet.awayGoals = tr.find('input[name="away-goals"]').val();
-        matchBet.HUB = tr.find('input[name="HUBRadio-'+i+'"]:checked').val();
+        matchBet.HUB = $('tr>td >label> input[name="HUBRadio-'+matchBet.matchNumber+'"]:checked').val();
         bettingData.push(matchBet);
 
     });

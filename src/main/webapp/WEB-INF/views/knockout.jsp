@@ -19,8 +19,8 @@
            <thead>
                <tr>
                    <th>#</th>
-                   <th>Dato</th>
-                   <th>Klokken</th>
+                   <th>H-Lag</th>
+                   <th>B-Lag</th>
                    <th>Hjemme</th>
                    <th>Borte</th>
                    <th>Resultat</th>

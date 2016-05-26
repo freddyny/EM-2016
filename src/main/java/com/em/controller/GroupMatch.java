@@ -7,7 +7,7 @@ package com.em.controller;
 public class GroupMatch extends Match{
 
 
-    public GroupMatch(int home, int away, int nr, char hub){
+    public GroupMatch(long home, long away, int nr, char hub){
         setHomeGoals(home);
         setAwayGoals(away);
         setHUB(hub);
