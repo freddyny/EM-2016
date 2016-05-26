@@ -6,21 +6,21 @@
 <html>
 <head>
 
-       <title>Gruppe ${groupName}</title>
+       <title>${knockout}</title>
 
 
 </head>
 <body>
-    <h1>Gruppe ${groupName}</h1>
+    <h1>${knockout}</h1>
     <p>Legg til resultater, sorter gruppen og trykk på neste.</p>
-    <p> Man får 2 poeng for riktig resultat og 1 poeng for riktig HUB</p>
-    <form:form method="POST" class = "groupForm" action="/group">
+    <p>Man må ha begge lag riktig for å få poeng for resultat og HUB.</p>
+    <form:form method="POST" class = "groupForm" action="/knockout">
        <table class="table match-table">
            <thead>
                <tr>
                    <th>#</th>
-                   <th>Dato</th>
-                   <th>Klokken</th>
+                   <th>H-Lag</th>
+                   <th>B-Lag</th>
                    <th>Hjemme</th>
                    <th>Borte</th>
                    <th>Resultat</th>
@@ -30,25 +30,20 @@
            <tbody></tbody>
        </table>
        <input type="hidden" class="input_JSON" name="group" required />
-       <input type="hidden" class="nextGroup" name="nextGroup" value="" />
+       <input type="hidden" class="nextKnockout" name="nextKnockout" value="${nextKnockout}" />
 
-       <p>Sorter listen i den rekkefølgen du tror gruppen ender</p>
-       <p>Du får 2 poeng for hvert riktig plassert lag.</p>
-           <ol class='sort-teams list-group'>
-           </ol>
 
-       <button class="btn btn-default group-button" type="submit" >Neste</button>
+       <button class="btn btn-default knockout-button" type="submit" >Neste</button>
     </form:form>
-
-
 
     <script src='js/jquery-sortable.js'></script>
     <script>
         var json = ${json};
-        var group =  "${nextGroupName}"
-        var thisGroup = "${groupName}";
+        var knockout = "${knockout}";
     </script>
-    <script src="<c:url value="/js/group.js"/>"></script>
+    <script src="<c:url value="/js/knockout.js"/>"></script>
+    <script src="<c:url value="/js/bootstrap-select.js"/>"></script>
+
 
 </body>
 </html>

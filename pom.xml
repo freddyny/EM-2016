@@ -159,6 +159,7 @@
 					<source>1.7</source>
 					<target>1.7</target>
 
+
 				</configuration>
 			</plugin>
 
@@ -176,6 +177,7 @@
 							<targetPath>WEB-INF</targetPath>
 						</resource>
 					</webResources>
+
 				</configuration>
 			</plugin>
 

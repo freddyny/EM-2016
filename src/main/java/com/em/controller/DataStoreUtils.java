@@ -4,16 +4,24 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.repackaged.com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
+import javax.xml.crypto.Data;
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by frederiknygaard on 28.04.16.
  */
 public class DataStoreUtils {
+    private static final Log log = LogFactory.getLog(DataStoreUtils.class);
 
     public static void putGroupInDatastore(String JSONGroup){
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -40,6 +48,222 @@ public class DataStoreUtils {
 
 
     }
+
+
+
+    public static void putCompleteJsonInDS(){
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        ArrayList<GroupMatch> groupMatches = new ArrayList<GroupMatch>();
+        for (int i = 0;i<36;i++){
+            Entity groupMatch = getSingleEntity("Match_"+(i+1),currentUser.getUserId());
+            System.out.println("Group  "+i);
+            String HUB = (String) groupMatch.getProperty("HUB");
+            long homeGoals = (long) groupMatch.getProperty("homeGoals");
+            long awayGoals = (long) groupMatch.getProperty("awayGoals");
+
+
+            GroupMatch group = new GroupMatch(homeGoals,awayGoals,i+1,HUB.charAt(0));
+
+            groupMatches.add(group);
+
+        }
+
+
+        ArrayList<KnockoutMatch> knockoutMatches = new ArrayList<KnockoutMatch>();
+        for (int i = 36;i<51;i++){
+            Entity groupMatch = getSingleEntity("Match_"+(i+1),currentUser.getUserId());
+            System.out.println("KO: "+(i+1));
+
+            String HUB = (String) groupMatch.getProperty("HUB");
+            long homeGoals = (long) groupMatch.getProperty("homeGoals");
+            long awayGoals = (long) groupMatch.getProperty("awayGoals");
+            String homeTeam = (String) groupMatch.getProperty("homeTeam");
+
+            String awayTeam = (String) groupMatch.getProperty("awayTeam");
+
+
+            KnockoutMatch knockoutMatch = new KnockoutMatch(homeGoals,awayGoals,i,HUB.charAt(0),homeTeam,awayTeam);
+
+            knockoutMatches.add(knockoutMatch);
+
+        }
+
+        Entity winner = getSingleEntity("Winner",currentUser.getUserId());
+        String win = (String) winner.getProperty("Team");
+
+
+        Entity playersEntity = getSingleEntity("Player",currentUser.getUserId());
+        ArrayList<Toppscorers> toppscorers = new ArrayList<Toppscorers>();
+        ArrayList<BestPlayer> bestPlayers = new ArrayList<BestPlayer>();
+
+        for(int i = 0;i<3;i++){
+            String toppscorer = (String) playersEntity.getProperty("Toppscorer"+(i+1));
+            String bestPlayer = (String) playersEntity.getProperty("BestPlayer"+(i+1));
+            long goals = (long) playersEntity.getProperty("Goal"+(i+1));
+
+            Toppscorers ts = new Toppscorers(i+1,goals, toppscorer);
+            toppscorers.add(ts);
+
+            BestPlayer bp = new BestPlayer(i+1,bestPlayer);
+            bestPlayers.add(bp);
+
+
+        }
+
+        Players players = new Players(toppscorers,bestPlayers);
+
+        char[] groups = {'A','B','C','D','E','F'};
+        ArrayList<ArrayList<String>> groupGuess = new ArrayList<ArrayList<String>>();
+        for(char c:groups){
+
+            Entity group = getSingleEntity("Group"+c,currentUser.getUserId());
+            ArrayList<String> gr = (ArrayList<String>) group.getProperty("bet");
+
+            groupGuess.add(gr);
+
+        }
+
+        UserBet userBet = new UserBet(groupMatches,knockoutMatches,win,players,groupGuess);
+
+        Gson gson = new Gson();
+        String jsonInString = gson.toJson(userBet);
+
+        Entity betEntity = new Entity("CompleteBet", currentUser.getUserId());
+        Text json = new Text(jsonInString);
+        betEntity.setProperty("Bet", json);
+        datastore.put(betEntity);
+
+
+        ///TODO::: SJEKKE OM VI FÅR HELE JSON OG LAGRE RIKTIG VERDI PÅ HUB.
+
+
+        Entity bet = getSingleEntity("CompleteBet",currentUser.getUserId());
+
+        Text text = (Text) bet.getProperty("Bet");
+        String string = text.getValue();
+        System.out.println(string);
+
+    }
+
+
+    public static void DeletePlayer(String id){
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+        for (int i = 0;i<36;i++){
+            datastore.delete(KeyFactory.createKey("Match_" + (i + 1), id));
+
+
+        }
+
+        ArrayList<KnockoutMatch> knockoutMatches = new ArrayList<KnockoutMatch>();
+        for (int i = 36;i<51;i++){
+            datastore.delete(KeyFactory.createKey("Match_" + (i + 1), id));
+
+        }
+        datastore.delete(KeyFactory.createKey("Winner", id));
+        datastore.delete(KeyFactory.createKey("Player", id));
+
+        char[] groups = {'A','B','C','D','E','F'};
+        ArrayList<ArrayList<String>> groupGuess = new ArrayList<ArrayList<String>>();
+        for(char c:groups){
+
+            datastore.delete(KeyFactory.createKey("Group"+c, id));
+
+
+        }
+        datastore.delete(KeyFactory.createKey("CompleteBet", id));
+        datastore.delete(KeyFactory.createKey("Users", id));
+
+
+        log.info("SLETTET SPILLER");
+    }
+
+
+    public static Entity getSingleEntity(String kind, String id) {
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        try {
+            return datastore.get(KeyFactory.createKey(kind, id));
+        } catch (EntityNotFoundException e) {
+            return null;
+        }
+    }
+
+
+
+    public static void putKnockoutInDatastore(String JSONGroup){
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+
+        Knockout knockout;
+        Gson gson = new GsonBuilder().create();
+        knockout = gson.fromJson(JSONGroup, Knockout.class);
+
+        for(KnockoutMatch knockoutMatch: knockout.getMatches()){
+            Entity match = new Entity("Match_"+knockoutMatch.getMatchNumber(), currentUser.getUserId());
+            match.setProperty("HUB", "" + knockoutMatch.getHUB());
+            match.setProperty("homeTeam", knockoutMatch.getHomeTeam());
+            match.setProperty("awayTeam", knockoutMatch.getAwayTeam());
+
+            match.setProperty("homeGoals", knockoutMatch.getHomeGoals());
+            match.setProperty("awayGoals", knockoutMatch.getAwayGoals());
+
+            datastore.put(match);
+        }
+
+
+
+    }
+
+
+    public static void putPlayersInDatastore(String JSONPlayer){
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+        Players players;
+        Gson gson = new GsonBuilder().create();
+        players = gson.fromJson(JSONPlayer, Players.class);
+        Entity player = new Entity("Player", currentUser.getUserId());
+        System.out.println("\n\n"+players.getBestPlayer());
+        for(Toppscorers ts: players.getToppscorers()){
+            player.setProperty("Toppscorer"+ts.getNumber(), ts.getPlayer());
+            player.setProperty("Goal" + ts.getNumber(), ts.getGoals());
+        }
+
+        for(BestPlayer bp: players.getBestPlayer()){
+            player.setProperty("BestPlayer" + bp.getNumber(), bp.getPlayer());
+
+        }
+
+        datastore.put(player);
+
+
+
+    }
+
+    public static void putWinnerInDatastore(String Winner){
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        Entity winner = new Entity("Winner", currentUser.getUserId());
+        winner.setProperty("Team", Winner);
+
+        datastore.put(winner);
+    }
+
+
+
 
     public static void putUserInDataStore(String userName,int score){
         UserService userService = UserServiceFactory.getUserService();

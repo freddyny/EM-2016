@@ -14,6 +14,7 @@
 <head>
     <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap.min.css"/''>
     <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css"/''>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap-select.min.css"/''>
     <link type="text/css" rel="stylesheet" href="/stylesheets/template.css"/>
     <link type="text/css" rel="stylesheet" href="/stylesheets/form.css"/''>
     <script src="<c:url value="/js/jquery1.11.1.min.js"/>"></script>
@@ -27,8 +28,8 @@
 </script>
     <div class="blackbackground">
 
-        <nav class="navbar navbar-inverse">
-          <div class="container-fluid">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -43,10 +44,12 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li ><a href="/yourBet">Ditt Spill</a></li>
+                <li ><a href="/yourBet">Legg til/Endre</a></li>
                 <li ><a href="/matches">Kampoppsett </a></li>
                 <li ><a href="/rules">Regler </a></li>
                 <li ><a href="/scores">Leaderboard</a></li>
+                <li ><a href="/completeBet">Ditt Spill</a></li>
+
                 <!--<li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                   <ul class="dropdown-menu">
