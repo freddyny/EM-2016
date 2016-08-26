@@ -9,15 +9,10 @@
 
 </head>
 <body>
-    <h1>Players</h1>
-    <p>Legg til hvem du tror blir den beste spilleren og toppscorer.</p>
-    <p>Skriv fullt navn slik det er skrevet på denne siden:<a href="http://www.mirror.co.uk/sport/football/news/euro-2016-squads-confirmed-provisional-7986775">her</a></p>
-
-
-
-    <form:form method="POST" action="/finished">
+    <form:form method="POST" action="/addPlayerScoresPOST">
        <h2>Toppscorer</h2>
        <p>Her får man poeng for antall mål og riktig spiller.</p>
+       <p>BESTE SPILLER 2 ER HVILKET LAG SOM VINNER!</p>
 
        <table class="table toppscorer-table">
            <thead>
@@ -48,7 +43,7 @@
        <input type="hidden" class="input_JSON" name="players" required />
 
     </form:form>
-    <script src="<c:url value="/js/players.js"/>"></script>
+    <script src="<c:url value="/js/addPlayer.js"/>"></script>
     <script src="<c:url value="/js/bootstrap-select.js"/>"></script>
 
 </body>

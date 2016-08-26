@@ -49,7 +49,70 @@ public class DataStoreUtils {
 
     }
 
+    public static void completeToDataStore(){
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        List<Entity> entities = DataStoreUtils.getPreparedQuery("Users",false,"").asList(FetchOptions.Builder.withDefaults());
+        for(Entity e:entities) {
+            String userID = e.getKey().getName();
 
+            Entity e_completeBet = getSingleEntity("CompleteBet", userID);
+            String completeBetJson;
+            try{
+                completeBetJson = ((Text) e_completeBet.getProperty("Bet")).getValue();
+
+            }catch (NullPointerException f){
+                continue;
+            }
+
+            Gson gson = new GsonBuilder().create();
+            UserBet userBet = gson.fromJson(completeBetJson, UserBet.class);
+
+
+
+            for (int i = 0;i<36;i++){
+                Entity groupMatch = getSingleEntity("Match_"+(i+1),userID);
+
+                log.info("Match_"+(i+1)+userID);
+                groupMatch.setProperty("HUB", ""+userBet.getGroups().get(i).getHUB());
+                groupMatch.setProperty("homeGoals",userBet.getGroups().get(i).getHomeGoals());
+                groupMatch.setProperty("awayGoals",userBet.getGroups().get(i).getAwayGoals());
+
+                datastore.put(groupMatch);
+
+            }
+            int matchNr = 36;
+            for (int i = 0;i<15;i++){
+                Entity knockoutMatch = getSingleEntity("Match_"+(matchNr+1),userID);
+                knockoutMatch.setProperty("HUB", ""+userBet.getKnockouts().get(i).getHUB());
+                knockoutMatch.setProperty("homeGoals", userBet.getKnockouts().get(i).getHomeGoals());
+                knockoutMatch.setProperty("awayGoals", userBet.getKnockouts().get(i).getAwayGoals());
+                knockoutMatch.setProperty("awayTeam", userBet.getKnockouts().get(i).getAwayTeam());
+                knockoutMatch.setProperty("homeTeam", userBet.getKnockouts().get(i).getHomeTeam());
+
+                datastore.put(knockoutMatch);
+                matchNr ++;
+            }
+
+            Entity winner = getSingleEntity("Winner", userID);
+            winner.setProperty("Team", userBet.getWinner());
+            datastore.put(winner);
+
+
+            char[] groups = {'A','B','C','D','E','F'};
+            int groupNr = 0;
+            for(char c:groups){
+                Entity group = getSingleEntity("Group"+c, userID);
+                group.setProperty("bet",userBet.getGroupGuess().get(groupNr));
+
+                datastore.put(group);
+                groupNr++;
+
+            }
+
+        }
+
+
+    }
 
     public static void putCompleteJsonInDS(){
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -136,9 +199,6 @@ public class DataStoreUtils {
         Text json = new Text(jsonInString);
         betEntity.setProperty("Bet", json);
         datastore.put(betEntity);
-
-
-        ///TODO::: SJEKKE OM VI FÅR HELE JSON OG LAGRE RIKTIG VERDI PÅ HUB.
 
 
         Entity bet = getSingleEntity("CompleteBet",currentUser.getUserId());
@@ -235,12 +295,12 @@ public class DataStoreUtils {
         Entity player = new Entity("Player", currentUser.getUserId());
         System.out.println("\n\n"+players.getBestPlayer());
         for(Toppscorers ts: players.getToppscorers()){
-            player.setProperty("Toppscorer"+ts.getNumber(), ts.getPlayer());
+            player.setProperty("Toppscorer"+ts.getNumber(), ts.getPlayer().replace(" ","").toLowerCase());
             player.setProperty("Goal" + ts.getNumber(), ts.getGoals());
         }
 
         for(BestPlayer bp: players.getBestPlayer()){
-            player.setProperty("BestPlayer" + bp.getNumber(), bp.getPlayer());
+            player.setProperty("BestPlayer" + bp.getNumber(), bp.getPlayer().replace(" ", "").toLowerCase());
 
         }
 
@@ -265,7 +325,21 @@ public class DataStoreUtils {
 
 
 
-    public static void putUserInDataStore(String userName,int score){
+    public static void putUserInDataStore(long score,String id){
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+
+        Entity user = getSingleEntity("Users",id);
+        user.setProperty("score", score);
+        datastore.put(user);
+
+    }
+
+
+    public static void putUserInDataStoreWithUserName(String userName, long score){
         UserService userService = UserServiceFactory.getUserService();
         User currentUser = userService.getCurrentUser();
 
@@ -274,21 +348,24 @@ public class DataStoreUtils {
 
         Entity user = new Entity("Users", currentUser.getUserId());
         user.setProperty("score", score);
-        user.setProperty("userName", userName);
+        user.setProperty("userName",userName);
 
         datastore.put(user);
 
     }
 
-    public static Entity getEntityFromDatastore(String tableName,String id) throws EntityNotFoundException {
+    public static Entity getEntityFromDatastore(String tableName,String id) {
         UserService userService = UserServiceFactory.getUserService();
         User currentUser = userService.getCurrentUser();
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-        Entity datastoreEntity = datastore.get(KeyFactory.createKey(tableName, id));
-
-        return datastoreEntity;
+        try{
+            Entity datastoreEntity = datastore.get(KeyFactory.createKey(tableName, id));
+            return datastoreEntity;
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
@@ -297,7 +374,10 @@ public class DataStoreUtils {
 
     }
 
-    private static PreparedQuery getPreparedQuery(String kind,boolean sorted, String sortProperty){
+
+
+
+    public static PreparedQuery getPreparedQuery(String kind,boolean sorted, String sortProperty){
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query q;
         if(sorted){
@@ -313,6 +393,7 @@ public class DataStoreUtils {
         List<Entity> entities = getAllUsersFromDatastore(tableName);
         ArrayList<BettingUser> bettingUsers = new ArrayList<BettingUser>();
         for(Entity e:entities){
+
             BettingUser bu = new BettingUser(e);
             bettingUsers.add(bu);
 

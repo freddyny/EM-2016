@@ -32,11 +32,14 @@ function improvedGetTimeString(date) {
 // Of course, normally we would receive this as a string:
 var jsonData = JSON.stringify(json);
 
+console.debug("Groups:  \t"+ groups + "\nLastGuess"+ lastGuess+"f");
+
+
 // Now we can render our data using for instance a function:
-renderData(jsonData);
+renderData(jsonData,groups,lastGuess);
 
 
-function renderData(jsonData) {
+function renderData(jsonData,groups,lastGuess) {
     // First parse it from json:
 
     var groupData = JSON.parse(jsonData);
@@ -117,7 +120,7 @@ function renderData(jsonData) {
            var homeGoalsInput = $('<input>');
 
            // We set attributes to the input usning .attr(field, value)
-           homeGoalsInput.attr('type', 'number').attr('name', 'home-goals').attr('value','0');
+           homeGoalsInput.attr('type', 'number').attr('name', 'home-goals').attr('value','0').attr('min','0');
 
            // Classes are added using .addClass()
            homeGoalsInput.addClass('form-control');
@@ -127,6 +130,7 @@ function renderData(jsonData) {
                .attr('type', 'number')
                .attr('name', 'away-goals')
                .attr('value','0')
+               .attr('min','0')
                .addClass('form-control');
 
            // Note that even though we created the input elements,
@@ -162,8 +166,74 @@ function renderData(jsonData) {
             // And lastly, we must not forget to append our table row
             // to our table, this should be placed withing <tbody>
             $("table.match-table > tbody").append(tr);
+
+
         }
+
     }
+    if(knockout === "8-Delsfinale") {
+        var groupData = JSON.stringify(groups);
+        var groupJSON = JSON.parse(groupData);
+        $('.groups').show();
+        var groupTeams = groupJSON.groups;
+        var index=0;
+        ['A','B','C','D','E','F'].forEach(function(teamValue) {
+            var groupList = groupTeams[index];
+            console.debug("index: " + index);
+            var teams = groupList.teams;
+            for (var j = 0;j<teams.length;j++){
+                console.debug("j: " + j);
+                var tr = $('<tr>');
+                var number = $('<td>').addClass('group'+teamValue+'-number').append(j+1);
+                var team = $('<td>').addClass('group'+teamValue+'-team').append(teams[j]);
+                tr.append(number);
+                tr.append(team);
+                $("table.group"+teamValue+"-table > tbody").append(tr);
+            }
+
+
+            index++;
+
+
+        });
+
+
+    }
+
+    else if(knockout === "Kvartfinale" || knockout === "Semifinale" || knockout === "Finale"){
+
+        var lastGuessData = JSON.stringify(lastGuess);
+        var lastGuessJson = JSON.parse(lastGuessData);
+        var lastGuessMatches = lastGuessJson.matches;
+
+        $('.knockout-guess').show();
+        for (var j = 0;j<lastGuessMatches.length;j++){
+            match = lastGuessMatches[j];
+            var tr = $('<tr>');
+            var matchNr = $('<td>').addClass('match-nr')
+                            .append(match.matchNumber);
+            var homeTeam = $('<td>').addClass('ht')
+                                        .append(match.homeTeam);
+            var awayTeam = $('<td>').addClass('at')
+                                        .append(match.awayTeam);
+            var result = "" + match.homeGoals + "-" + match.awayGoals;
+            var resultTd = $('<td>').addClass('result').append(result);
+
+
+            var HUB = $('<td>').addClass('HUB')
+                                        .append(match.HUB);
+
+            tr.append(matchNr);
+            tr.append(homeTeam);
+            tr.append(awayTeam);
+            tr.append(resultTd);
+            tr.append(HUB);
+
+            $("table.knockout-guess-table> tbody").append(tr);
+        }
+
+    }
+
 }
 
 

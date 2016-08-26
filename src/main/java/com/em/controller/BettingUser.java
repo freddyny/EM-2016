@@ -11,7 +11,7 @@ public class BettingUser {
     private String email;
     private String userName;
     private long score;
-
+    private String id;
 
 
 
@@ -28,6 +28,7 @@ public class BettingUser {
 
         userName = (String) e.getProperty("userName");
         score = (long) e.getProperty("score");
+        id = e.getKey().getName();
     }
 
     public BettingUser(String userName, String email){
@@ -68,5 +69,13 @@ public class BettingUser {
 
     public String toString(){
         return "Username: " + userName + "\t" + "email: " + email + "\t" + "Score: " + score;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

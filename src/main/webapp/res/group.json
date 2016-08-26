@@ -1,0 +1,11 @@
+{
+  "groups":
+  [
+    {"teams": ["Frankrike","Romania","Albania","Sveits"]},
+    {"teams": ["England","Russland","Wales","Slovakia"]},
+    {"teams": ["Nord-Irland","Tyskland","Ukraina","Polen"]},
+    {"teams": ["Spania","Tsjekkia","Tyrkia","Kroatia"]},
+    {"teams": ["Sverige","Belgia","Italia","Irland"]},
+    {"teams": ["Island","Østerrike","Ungarn","Portugal"]}
+  ]
+}

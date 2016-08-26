@@ -9,7 +9,7 @@ function fixTable() {
         var tdScorer = $('<td>');
         var toppscorer = $('<input>')
                             .attr('type', 'text')
-                            .attr('name', 'toppscorer')
+                            .attr('name', 'toppscorer'+(i+1))
                             .addClass('form-control')
                             .addClass("toppscorer");
 
@@ -18,7 +18,7 @@ function fixTable() {
 
         var goals = $('<input>')
                     .attr('type', 'number')
-                    .attr('name', 'goals')
+                    .attr('name', 'goals'+(i+1))
                     .attr('value','0')
                     .attr('min','0')
                     .addClass('form-control goals');
@@ -27,7 +27,7 @@ function fixTable() {
 
     }
 
-     for (i = 0; i < 3; i++) {
+     for (i = 0; i < 2; i++) {
             var tr = $('<tr>');
             tr.append($('<td>').append((i+1)+": "));
 
@@ -36,7 +36,7 @@ function fixTable() {
             var tdScorer = $('<td>');
             var bestPlayer = $('<input>')
                                 .attr('type', 'text')
-                                .attr('name', 'bestPlayer')
+                                .attr('name', 'bestPlayer'+(i+1))
                                 .addClass('form-control')
                                 .addClass("bestPlayer");
 
@@ -46,7 +46,7 @@ function fixTable() {
         }
 }
 
-
+/*
 $('.player-btn').bind('click', getDataAndSend);
 function getDataAndSend() {
     players = {};
@@ -73,4 +73,4 @@ function getDataAndSend() {
     console.debug(json);
     $('input[name="players"]').val(json);
 
-}
+}*/
