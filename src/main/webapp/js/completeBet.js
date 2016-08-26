@@ -15,9 +15,9 @@ function renderData(jsonData,setUpData) {
     var matches = matchData.match;
     var groupMatches = betData.groupmatches;
     var knockoutMatches = betData.knockoutMatches;
-    let homeTeam;
-    let awayTeam;
-    let matchnr;
+    var homeTeam;
+    var awayTeam;
+    var matchnr;
     homeTeams = {};
     awayTeams = {};
 

@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,12 +26,22 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.crypto.Data;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 
 @Controller
@@ -66,7 +77,7 @@ public class EMController {
 
         if (currentUser == null) {
             return new ModelAndView("redirect:"
-                    + userService.createLoginURL("/"));
+                    + userService.createLoginURL("/delPlayer"));
         } else {
             return new ModelAndView("delete", "user",currentUser.getEmail() );
 
@@ -96,59 +107,7 @@ public class EMController {
     }
 
 
-    @RequestMapping(value = "/completeBet", method = RequestMethod.GET)
-    public ModelAndView bet() {
-        //Login
-        UserService userService = UserServiceFactory.getUserService();
-        User currentUser = userService.getCurrentUser();
 
-
-        if (currentUser == null) {
-            return new ModelAndView("redirect:"
-                    + userService.createLoginURL("/"));
-        } else {
-
-            Entity bet = DataStoreUtils.getSingleEntity("CompleteBet",currentUser.getUserId());
-
-            try{
-
-                Text text = (Text) bet.getProperty("Bet");
-                String string = text.getValue();
-                String jsonString = getJSONFromFile("res/kampoppsett.json");
-
-                ModelAndView mv =  new ModelAndView("completeBet", "json",string);
-                mv.addObject("kampoppsett",jsonString);
-                return mv;
-            }
-            catch (NullPointerException e) {
-                return new ModelAndView("index", "json","Hei");
-            }
-        }
-
-    }
-
-
-
-
-
-
-
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public ModelAndView test() {
-        //Login
-        UserService userService = UserServiceFactory.getUserService();
-        User currentUser = userService.getCurrentUser();
-
-
-        if (currentUser == null) {
-            return new ModelAndView("redirect:"
-                    + userService.createLoginURL("/"));
-        } else {
-            return new ModelAndView("test", "user",currentUser.getEmail() );
-
-        }
-
-    }
 
     @RequestMapping(value = "/matches", method = RequestMethod.GET)
     public ModelAndView matchOppsett() {
@@ -158,7 +117,7 @@ public class EMController {
 
         if (currentUser == null) {
             return new ModelAndView("redirect:"
-                    + userService.createLoginURL("/addUser"));
+                    + userService.createLoginURL("/matches"));
         }
         else{
             String jsonString = getJSONFromFile("res/kampoppsett.json");
@@ -179,7 +138,7 @@ public class EMController {
 
         if (currentUser == null) {
             return new ModelAndView("redirect:"
-                    + userService.createLoginURL("/"));
+                    + userService.createLoginURL("/rules"));
         } else {
             return new ModelAndView("rules");
 
@@ -197,7 +156,7 @@ public class EMController {
 
         if (currentUser == null) {
             return new ModelAndView("redirect:"
-                    + userService.createLoginURL("/"));
+                    + userService.createLoginURL("/scores"));
         } else {
             String json = MemcacheUtils.getScores();
             ModelAndView mv = new ModelAndView("scores", "json",json);
@@ -208,8 +167,71 @@ public class EMController {
 
     }
 
+    @RequestMapping(value = {"/game_{id}"}, method = RequestMethod.GET)
+    public ModelAndView showTheme(@PathVariable(value= "id")String id) throws EntityNotFoundException {
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
 
-    @RequestMapping(value = "/yourBet", method = RequestMethod.GET)
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/scores"));
+        } else {
+            Entity bet = DataStoreUtils.getSingleEntity("CompleteBet", id);
+
+            try{
+
+                Text text = (Text) bet.getProperty("Bet");
+                String string = text.getValue();
+                String jsonString = getJSONFromFile("res/kampoppsett.json");
+
+                ModelAndView mv =  new ModelAndView("completeBet", "json",string);
+                mv.addObject("kampoppsett",jsonString);
+                return mv;
+            }
+            catch (NullPointerException e) {
+                return new ModelAndView("index", "json","Hei");
+            }
+        }
+
+
+
+    }
+
+
+
+    @RequestMapping(value = "/completeBet", method = RequestMethod.GET)
+    public ModelAndView bet() {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/completeBet"));
+        } else {
+
+            Entity bet = DataStoreUtils.getSingleEntity("CompleteBet", currentUser.getUserId());
+
+            try{
+
+                Text text = (Text) bet.getProperty("Bet");
+                String string = text.getValue();
+                String jsonString = getJSONFromFile("res/kampoppsett.json");
+
+                ModelAndView mv =  new ModelAndView("completeBet", "json",string);
+                mv.addObject("kampoppsett",jsonString);
+                return mv;
+            }
+            catch (NullPointerException e) {
+                return new ModelAndView("index", "json","Hei");
+            }
+        }
+
+    }
+
+    @RequestMapping(value = "/yourBetIkkeLov", method = RequestMethod.GET)
     public ModelAndView spill() {
         //Login
         UserService userService = UserServiceFactory.getUserService();
@@ -240,7 +262,7 @@ public class EMController {
                     + userService.createLoginURL("/yourBet"));
         } else {
 
-            DataStoreUtils.putUserInDataStore(userName, 0);
+            DataStoreUtils.putUserInDataStoreWithUserName(userName, 0);
             log.info("Skal legge til bruker i Datastore og oppdatere Memcache.");
             MemcacheUtils.putScores();
 
@@ -280,10 +302,17 @@ public class EMController {
                 System.out.println("ER I GROUP DONE");
                 //NAVIGER TIL UTSLAGSRUNDER.
                 String thisKnockout = "8-Delsfinale";
+                String groups = getJSONFromFile("res/group.json");
+                log.info("\n\n"+groups);
                 ModelAndView mv = new ModelAndView("knockout", "user",currentUser );
+
+
                 mv.addObject("json",newJsonString);
                 mv.addObject("knockout",thisKnockout);
                 mv.addObject("nextKnockout", getNextKnockout(thisKnockout));
+                mv.addObject("groups",groups);
+                mv.addObject("lastGuess","null");
+
 
                 return mv;
             }
@@ -310,6 +339,7 @@ public class EMController {
             return new ModelAndView("redirect:"
                     + userService.createLoginURL("/yourBet"));
         } else {
+
             if (thisKnockout.equals("Vinner")){
                 DataStoreUtils.putKnockoutInDatastore(JSONKnockout);
 
@@ -319,8 +349,7 @@ public class EMController {
                 return mv;
             }
             else{
-                    //Legg inn i DATASTORE.
-                System.out.println(JSONKnockout);
+                log.info("\n\n\n"+JSONKnockout);
 
                 DataStoreUtils.putKnockoutInDatastore(JSONKnockout);
                 String nextKnockout = getNextKnockout(thisKnockout);
@@ -331,6 +360,8 @@ public class EMController {
                 mv.addObject("json",newJsonString);
                 mv.addObject("knockout", thisKnockout);
                 mv.addObject("nextKnockout", nextKnockout);
+                mv.addObject("lastGuess",JSONKnockout);
+                mv.addObject("groups","null");
                 return mv;
             }
         }
@@ -357,11 +388,434 @@ public class EMController {
 
     }
 
+    @RequestMapping(value = "/finished", method = RequestMethod.POST)
+    public ModelAndView finished(@RequestParam("players") String json){
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/yourBet"));
+        } else {
+            System.out.println("\n\n" + json + "\n\n");
+            DataStoreUtils.putPlayersInDatastore(json);
+            DataStoreUtils.putCompleteJsonInDS();
+
+            Entity betEntity = DataStoreUtils.getSingleEntity("CompleteBet", currentUser.getUserId());
+
+            Text betText = (Text) betEntity.getProperty("Bet");
+            String betString = betText.getValue();
+
+            sendMail(currentUser.getEmail(), currentUser.getNickname(), "Em-konkurranse-svar fra: " + currentUser.getEmail(), betString);
+
+            ModelAndView mv = new ModelAndView("finished", "user",currentUser.getNickname() );
+            return mv;
+        }
+
+    }
+
+
+    @RequestMapping(value = "/addMatchResult", method = RequestMethod.GET)
+        public ModelAndView addResult() {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/addMatchResult"));
+        } else {
+
+            ModelAndView mv = new ModelAndView("addMatchResult", "command", new FormTest());
+            mv.addObject("msg","Legg til resultat her");
+            return mv;
+
+
+
+        }
+    }
+
+    @RequestMapping(value = "/addMatchResultPost", method = RequestMethod.POST)
+    public ModelAndView addResultPOST(@RequestParam("matchNr") int matchNr,@RequestParam("result") String result,@RequestParam("HUB") String hub) {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/addMatchResult"));
+        } else {
+            long homeGoals = Long.parseLong("" + result.charAt(0));
+            long awayGoals = Long.parseLong("" + result.charAt(2));
+
+            int score = 0;
+
+            List<Entity> entities = DataStoreUtils.getPreparedQuery("Match_"+matchNr,false,"").asList(FetchOptions.Builder.withDefaults());
+            for(Entity e:entities) {
+                score = 0;
+                String userID = e.getKey().getName();
+                //HUB	awayGoals	homeGoals
+                long homeGoalGuess = (long) e.getProperty("homeGoals");
+                long awayGoalGuess = (long) e.getProperty("awayGoals");
+                String hubGuess = (String) e.getProperty("HUB");
+
+                log.info("\nhomeGoal: "+ homeGoalGuess + " VS " +homeGoals);
+                log.info("\nawayGoal: "+ awayGoalGuess + " VS " +awayGoals);
+                log.info("\nHUB: "+ hubGuess + " VS " +hub);
+
+                if ((homeGoals == homeGoalGuess) &&(awayGoals==awayGoalGuess)){
+                    score+=2;
+                }
+                if (hub.replace(" ","").equals(hubGuess.replace(" ",""))) {
+                    score += 1;
+                }
+
+                log.info("\n SCORE:  "+score);
+                if(score != 0){
+                    Entity userEntity = DataStoreUtils.getEntityFromDatastore("Users",userID);
+                    long userScore = (long) userEntity.getProperty("score");
+                    userScore += score;
+                    userEntity.setProperty("score",userScore);
+                    datastore.put(userEntity);
+                }
+
+            }
+
+            MemcacheUtils.putScores();
+
+            sendMail("frederikny@gmail.com", "nygis", "[EM-Bones] KnockoutResults matchNr: +" + matchNr, "Du la til resultat i en knockoutmatch:\nMatchnr " + matchNr + " \nResultat: " + result + "\nHUB: " + hub);
+            ModelAndView mv = new ModelAndView("addMatchResult", "command", new FormTest());
+            mv.addObject("msg","Du har suksessfullt lagt til et resultat i kampnr: " + matchNr + " med resultat: " + result + " og HUB: " + hub);
+
+            return mv;
+
+        }
+    }
+
+
+    @RequestMapping(value = "/addKnockoutMatchResult", method = RequestMethod.GET)
+    public ModelAndView addKnockoutResult() {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/addMatchResult"));
+        } else {
+
+
+            ModelAndView mv = new ModelAndView("addKnockoutMatchResult", "command", new FormTest());
+            mv.addObject("msg", "Legg til resultat her");
+            return mv;
+
+
+
+        }
+    }
+    @RequestMapping(value = "/addKnockoutMatchResultPost", method = RequestMethod.POST)
+    public ModelAndView addKnockoutResultPOST(@RequestParam("matchNr") int matchNr, @RequestParam("result") String result,
+                                              @RequestParam("HUB") String hub, @RequestParam("homeTeam") String homeTeam,
+                                              @RequestParam("awayTeam") String awayTeam, @RequestParam("knockoutType") String knockoutType) {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+        int resultScore = 4;
+        int HUBScore = 2;
+        int teamScore = 0;
+        hub = hub.toUpperCase();
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/addMatchResult"));
+        } else {
+            long homeGoals = Long.parseLong("" + result.charAt(0));
+            long awayGoals = Long.parseLong("" + result.charAt(2));
+
+            switch(knockoutType){
+                case "8-Delsfinale":
+                    teamScore = 3;
+                    break;
+
+                case "Kvartfinale":
+                    teamScore = 4;
+                    break;
+                case "Semifinale":
+                    teamScore = 5;
+                    break;
+                case "Finale":
+                    teamScore = 10;
+                    break;
+
+            }
+            int score;
+            List<Entity> entities = DataStoreUtils.getPreparedQuery("Match_"+matchNr,false, "").asList(FetchOptions.Builder.withDefaults());
+            for(Entity e:entities) {
+                score = 0;
+                String userID = e.getKey().getName();
+                //HUB	awayGoals	homeGoals
+                long homeGoalGuess = (long) e.getProperty("homeGoals");
+                long awayGoalGuess = (long) e.getProperty("awayGoals");
+                String hubGuess = (String) e.getProperty("HUB");
+                String homeTeamGuess = (String) e.getProperty("homeTeam");
+                String awayTeamGuess = (String) e.getProperty("awayTeam");
+
+                /*log.info("\n\nhomeGoal: "+ homeGoalGuess + " VS " +homeGoals);
+                log.info("\n\nawayGoal: "+ awayGoalGuess + " VS " +awayGoals);
+                log.info("\n\nHUB: "+ hubGuess + " VS " +hub);
+                log.info("\n\nHomeTeam: " + homeTeam + " VS " + homeTeamGuess);
+                log.info("\n\nAwayTeam: " + awayTeam + " VS " + awayTeamGuess);
+                log.info("\n\nKnockout: " + knockoutType);*/
+
+                if(homeTeam.equals(homeTeamGuess) &&awayTeam.equals(awayTeamGuess)){
+
+                    if ((homeGoals == homeGoalGuess) &&(awayGoals==awayGoalGuess)){
+                        score+=resultScore;
+                    }
+
+                    if (hub.replace(" ","").equals(hubGuess.replace(" ", ""))) {
+                        score += HUBScore;
+                    }
+                }
+
+                if (homeTeam.equals(homeTeamGuess)){
+                    score += teamScore;
+                }
+
+                if (awayTeam.equals(awayTeamGuess)){
+                    score += teamScore;
+                }
+
+                log.info("\n SCORE:  "+score);
+                if(score != 0){
+                    Entity userEntity = DataStoreUtils.getEntityFromDatastore("Users",userID);
+                    long userScore = (long) userEntity.getProperty("score");
+                    userScore += score;
+                    userEntity.setProperty("score",userScore);
+                    datastore.put(userEntity);
+                }
+
+            }
+
+            MemcacheUtils.putScores();
+            sendMail("frederikny@gmail.com", "nygis", "[EM-Bones] KnockoutResults matchNr: +" + matchNr, "Du la til resultat i en knockoutmatch:\nMatchnr " + matchNr + " \nResultat: " + result + "\nHUB: " + hub + "\nHometeam: " + homeTeam + "\nAwayteam: " + awayTeam + "\nKnockoutType: " + knockoutType);
+            ModelAndView mv = new ModelAndView("addKnockoutMatchResult", "command", new FormTest());
+            mv.addObject("msg", "Du la til resultat i en knockoutmatch:\nMatchnr " + matchNr + " \nResultat: " + result + "\nHUB: " + hub
+                    + "\nHometeam: " + homeTeam + "\nAwayteam: " + awayTeam + "\nKnockoutType: " + knockoutType);
+
+            return mv;
+
+        }
+    }
+
+    @RequestMapping(value = "/addGroups", method = RequestMethod.GET)
+    public ModelAndView addGroup() {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/addMatchResult"));
+        } else {
+            ModelAndView mv = new ModelAndView("addGroups", "command", new FormTest());
+            mv.addObject("msg","Legg til resultat her");
+            return mv;
+        }
+    }
+
+
+    @RequestMapping(value = "/addGroupsPOST", method = RequestMethod.POST)
+    public ModelAndView addKnockoutResultPOST(@RequestParam("group") String group, @RequestParam("firstPlace") String firstPlace,
+                                              @RequestParam("secondPlace") String secondPlace, @RequestParam("thirdPlace") String thirdPlace,
+                                              @RequestParam("forthPlace") String forthPlace) {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+        ArrayList<String> teams = new ArrayList<String>();
+
+        teams.add(firstPlace);
+        teams.add(secondPlace);
+        teams.add(thirdPlace);
+        teams.add(forthPlace);
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/addMatchResult"));
+        } else {
+            List<Entity> entities = DataStoreUtils.getPreparedQuery("Group"+group,false, "").asList(FetchOptions.Builder.withDefaults());
+
+            for(Entity e:entities) {
+                int i = 0;
+                int score = 0;
+                String userID = e.getKey().getName();
+                ArrayList<String> guessedTeam = (ArrayList<String>) e.getProperty("bet");
+                for(String teamGuess: guessedTeam){
+
+                    log.info(teamGuess + " VS " + teams.get(i));
+
+                    if(teamGuess.equals(teams.get(i))){
+                        score +=2;
+
+                    }
+                    i++;
+
+                }
+                if(score != 0){
+                    Entity userEntity = DataStoreUtils.getEntityFromDatastore("Users",userID);
+                    long userScore = (long) userEntity.getProperty("score");
+                    userScore += score;
+                    userEntity.setProperty("score",userScore);
+                    datastore.put(userEntity);
+                }
+
+            }
+
+            MemcacheUtils.putScores();
+            sendMail("frederikny@gmail.com", "nygis", "[EM-Bones] GroupResult for gruppe " + group, "Du la til disse resultatene for gruppen:\n1. " + firstPlace + " \n2. : " + secondPlace + "\n3. : " + thirdPlace + "\n4. : " + forthPlace);
+            ModelAndView mv = new ModelAndView("addGroups", "command", new FormTest());
+            mv.addObject("msg", "[EM-Bones] GroupResult for gruppe " + group+ "\nDu la til disse resultatene for gruppen:\n1. " + firstPlace + " \n2. : " + secondPlace + "\n3. : " + thirdPlace + "\n4. : " + forthPlace);
+
+            return mv;
+
+        }
+    }
+
+
+    @RequestMapping(value = "/addPlayerScores", method = RequestMethod.GET)
+    public ModelAndView addPlayerScores() {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/addMatchResult"));
+        } else {
+            ModelAndView mv = new ModelAndView("addPlayers", "command", new FormTest());
+            mv.addObject("msg","Legg til resultat her");
+            return mv;
+        }
+    }
+
+
+    @RequestMapping(value = "/addPlayerScoresPOST", method = RequestMethod.POST)
+    public ModelAndView addPlayerScoresPOST(@RequestParam("toppscorer1") String toppscorer1, @RequestParam("toppscorer2") String toppscorer2,
+                                              @RequestParam("toppscorer3") String toppscorer3, @RequestParam("goals1") int goal1,
+                                              @RequestParam("goals2") int goal2,@RequestParam("goals3") int goal3,
+                                              @RequestParam("bestPlayer1") String bestPlayer,@RequestParam("bestPlayer2") String winner) {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+        ArrayList<String> toppscorers = new ArrayList<String>();
+        ArrayList<Integer> goals = new ArrayList<>();
+
+        goals.add(goal1);
+        goals.add(goal2);
+        goals.add(goal3);
+
+        toppscorers.add(toppscorer1.replace(" ","").toLowerCase());
+        toppscorers.add(toppscorer2.replace(" ","").toLowerCase());
+        toppscorers.add(toppscorer3.replace(" ","").toLowerCase());
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/addMatchResult"));
+        } else {
+            List<Entity> entities = DataStoreUtils.getPreparedQuery("Player", false, "").asList(FetchOptions.Builder.withDefaults());
+
+            for(Entity e:entities) {
+                int i = 0;
+                int score = 0;
+                String userID = e.getKey().getName();
+                ArrayList<String> guessedToppscorer = new ArrayList<>();
+                ArrayList<Long> guessedGoals = new ArrayList<>();
+                ArrayList<String> guessedBestPLayer = new ArrayList<>();
+
+                guessedToppscorer.add(((String) e.getProperty("Toppscorer1")).replace(" ","").toLowerCase());
+                guessedToppscorer.add(((String) e.getProperty("Toppscorer2")).replace(" ","").toLowerCase());
+                guessedToppscorer.add(((String) e.getProperty("Toppscorer3")).replace(" ","").toLowerCase());
+
+                guessedGoals.add((long) e.getProperty("Goal1"));
+                guessedGoals.add((long) e.getProperty("Goal2"));
+                guessedGoals.add((long) e.getProperty("Goal3"));
+
+                guessedBestPLayer.add(((String) e.getProperty("BestPlayer1")).replace(" ","").toLowerCase());
+                guessedBestPLayer.add(((String) e.getProperty("BestPlayer2")).replace(" ","").toLowerCase());
+                guessedBestPLayer.add(((String) e.getProperty("BestPlayer3")).replace(" ","").toLowerCase());
 
 
 
 
-    @RequestMapping(value = "/addUser", method = RequestMethod.GET)
+                for (int j = 0; j<3;j++){
+                    if(guessedToppscorer.get(j).equals(toppscorers.get(j))){
+                        if( guessedGoals.get(j).intValue() == goals.get(j)){
+                            score += 15;
+                        }
+                        else{
+                            score += 10;
+                        }
+                    }
+                    else{
+                        if(toppscorers.contains(guessedToppscorer.get(j))){
+                            for (int x = 0; x<3;x++){
+                                if(guessedToppscorer.get(j).equals(toppscorers.get(x))){
+                                    if (guessedGoals.get(j).intValue() == goals.get(x)){
+                                        score +=10;
+                                    }
+                                    else {score+=5;}
+                                }
+                            }
+                        }
+                    }
+
+                    if(guessedBestPLayer.get(j).equals(bestPlayer.replace(" ","").toLowerCase())){
+                        switch(j){
+                            case 0:
+                                score += 20;
+                                break;
+                            case 1:
+                                score += 10;
+                                break;
+                            case 2:
+                                score +=5;
+                                break;
+                        }
+                    }
+                }
+
+                Entity winnerEntity = DataStoreUtils.getSingleEntity("Winner",userID);
+                String guessedWinner =(String) winnerEntity.getProperty("Team");
+
+                if(guessedWinner.equals(winner)) score +=20;
+
+                log.info(score);
+                if(score != 0){
+                    Entity userEntity = DataStoreUtils.getEntityFromDatastore("Users",userID);
+                    long userScore = (long) userEntity.getProperty("score");
+                    userScore += score;
+                    userEntity.setProperty("score",userScore);
+                    datastore.put(userEntity);
+                }
+                i++;
+
+            }
+
+
+
+            MemcacheUtils.putScores();
+            sendMail("frederikny@gmail.com", "nygis", "[EM-Bones] Player score", "Toppscorer 1: " + toppscorer1 + " With goals " + goal1 + "Toppscorer 2: " + toppscorer2 + " With goals " + goal2 + "Toppscorer 3: " + toppscorer3 + " With goals " + goal3 + " BEst Player: " + bestPlayer + " Winner: "+ winner);
+            ModelAndView mv = new ModelAndView("addPlayers", "command", new FormTest());
+            mv.addObject("msg", "[EM-Bones] "+ "Toppscorer 1: "+ toppscorer1 + " With goals "+ goal1 + "Toppscorer 2: "+ toppscorer2 + " With goals "+ goal2 + "Toppscorer 3: "+ toppscorer3 + " With goals "+ goal3 + " BEst Player: " + bestPlayer + " Winner: "+ winner);
+
+            return mv;
+
+        }
+    }
+
+
+
+
+    @RequestMapping(value = "/addUserIkkeLov", method = RequestMethod.GET)
     public ModelAndView addUser() {
         //Login
         UserService userService = UserServiceFactory.getUserService();
@@ -374,11 +828,11 @@ public class EMController {
             log.info(" LOOL. " + currentUser.getEmail());
             ModelAndView mv = new ModelAndView("addUser", "command", new FormTest());
 
-                String jsonString = getJSONFromFile("res/data.json");
-                mv.addObject("data",jsonString);
-                mv.addObject("groupName", "A");
+            String jsonString = getJSONFromFile("res/data.json");
+            mv.addObject("data", jsonString);
+            mv.addObject("groupName", "A");
 
-                return mv;
+            return mv;
 
 
 
@@ -399,16 +853,32 @@ public class EMController {
         if (currentUser == null) {
             return new ModelAndView("redirect:"
                     + userService.createLoginURL("/addUser"));
-        }
-        else{
+        } else {
             log.info(" LOOL. " + currentUser.getEmail());
             return new ModelAndView("test", "newUser",currentUser.getEmail() );
+        }
+    }
+    @RequestMapping(value = "/completeBetToDatastore", method = RequestMethod.GET)
+    public ModelAndView completeBetToDatastore() {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/index"));
+        } else {
+            DataStoreUtils.completeToDataStore();
+            log.info("FERDIG Å LEGGE TIL INFO");
+
+            ModelAndView mv = new ModelAndView("/index", "user",currentUser.getNickname() );
+            return mv;
         }
     }
 
 
     @RequestMapping(value = "/addScore", method = RequestMethod.GET)
-    public ModelAndView scoreADd() {
+         public ModelAndView scoreADd() {
         //Login
         UserService userService = UserServiceFactory.getUserService();
         User currentUser = userService.getCurrentUser();
@@ -423,7 +893,7 @@ public class EMController {
     }
 
     @RequestMapping(value = "/addScore", method = RequestMethod.POST)
-    public ModelAndView scoreADdPost(@RequestParam("userName") String userName, @RequestParam("score") int score) {
+    public ModelAndView scoreADdPost(@RequestParam("id") String id, @RequestParam("score") int score) {
         //Login
         UserService userService = UserServiceFactory.getUserService();
         User currentUser = userService.getCurrentUser();
@@ -432,7 +902,12 @@ public class EMController {
             return new ModelAndView("redirect:"
                     + userService.createLoginURL("/yourBet"));
         } else {
-            DataStoreUtils.putUserInDataStore(userName,score);
+            Entity userEntity = DataStoreUtils.getEntityFromDatastore("Users",id);
+            long userScore = (long) userEntity.getProperty("score");
+
+            long newScore = userScore + score;
+
+            DataStoreUtils.putUserInDataStore(newScore,id);
             MemcacheUtils.putScores();
 
             ModelAndView mv = new ModelAndView("index", "user",currentUser.getNickname() );
@@ -441,28 +916,6 @@ public class EMController {
 
     }
 
-    @RequestMapping(value = "/finished", method = RequestMethod.POST)
-    public ModelAndView finished(@RequestParam("players") String json){
-        //Login
-        UserService userService = UserServiceFactory.getUserService();
-        User currentUser = userService.getCurrentUser();
-
-        if (currentUser == null) {
-            return new ModelAndView("redirect:"
-                    + userService.createLoginURL("/yourBet"));
-        } else {
-            System.out.println("\n\n"+json+"\n\n");
-            DataStoreUtils.putPlayersInDatastore(json);
-            DataStoreUtils.putCompleteJsonInDS();
-
-
-
-            //IKKE RETURNERE INDEX
-            ModelAndView mv = new ModelAndView("index", "user",currentUser.getNickname() );
-            return mv;
-        }
-
-    }
 
 
     private String getJSONFromFile(String file){
@@ -529,4 +982,48 @@ public class EMController {
         }
 
     }
+    private void sendMail(String from, String userName,String sub, String bet){
+        Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
+
+        try {
+            Message msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress(from, userName));
+            msg.addRecipient(Message.RecipientType.TO,
+                    new InternetAddress("frederikny@gmail.com", "Frederik Nygaard"));
+            msg.setSubject(sub );
+            msg.setText(bet);
+            Transport.send(msg);
+        } catch (AddressException e) {
+            // ...
+        } catch (MessagingException e) {
+            // ...
+        } catch (UnsupportedEncodingException e) {
+            // ...
+        }
+
+    }
+
+
+
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public ModelAndView test() {
+        //Login
+        UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+
+
+        if (currentUser == null) {
+            return new ModelAndView("redirect:"
+                    + userService.createLoginURL("/"));
+        } else {
+            return new ModelAndView("test", "user",currentUser.getEmail() );
+
+        }
+
+    }
+
 }
+
+

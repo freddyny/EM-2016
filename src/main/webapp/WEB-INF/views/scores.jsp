@@ -19,6 +19,7 @@
                <th>#</th>
                <th>Brukernavn</th>
                <th>Score</th>
+               <th>Spill</th>
            </tr>
         </thead>
     <tbody></tbody>

@@ -128,7 +128,6 @@
 
     <h2>Winner</h2>
     <h3 class="winner"><h3>
-    <h2>Players</h2>
     <div class="row">
         <div class = "col-md-6">
             <h3>Toppscorer</h3>

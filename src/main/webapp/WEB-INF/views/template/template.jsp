@@ -44,7 +44,6 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li ><a href="/yourBet">Legg til/Endre</a></li>
                 <li ><a href="/matches">Kampoppsett </a></li>
                 <li ><a href="/rules">Regler </a></li>
                 <li ><a href="/scores">Leaderboard</a></li>

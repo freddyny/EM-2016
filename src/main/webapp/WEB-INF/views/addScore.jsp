@@ -15,7 +15,7 @@
            <thead>
                <tr>
                    <th>Info</th>
-                   <th>Brukernavn</th>
+                   <th>ID</th>
                    <th>Score</th>
                </tr>
            </thead>
@@ -27,16 +27,16 @@
 
     <script>
         var tr = $('<tr>');
-        tr.append($('<td>').append("Brukernavn: "));
-        var userName = $('<input>')
+        tr.append($('<td>').append("ID: "));
+        var id = $('<input>')
                     .attr('type', 'text')
-                    .attr('name', 'userName')
+                    .attr('name', 'id')
                     .addClass('form-control');
         var score = $('<input>')
                     .attr('type', 'text')
                     .attr('name', 'score')
                     .addClass('form-control');
-        tr.append(userName);
+        tr.append(id);
         tr.append(score);
         $("table.username-table > tbody").append(tr);
     </script>
